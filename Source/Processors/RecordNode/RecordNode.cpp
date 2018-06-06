@@ -194,24 +194,28 @@ String RecordNode::generateDirectoryName()
 
     String filename = AccessClass::getControlPanel()->getTextToPrepend();
 
-    String datestring = "";
+	if (filename.length() < 25) // don't append if prepend text is over 25 characters
+	{
+		String datestring = "";
 
-    for (int n = 0; n < t.size(); n++)
-    {
-        if (t[n] < 10)
-            datestring += "0";
+		for (int n = 0; n < t.size(); n++)
+		{
+			if (t[n] < 10)
+				datestring += "0";
 
-        datestring += t[n];
+			datestring += t[n];
 
-        if (n == 2)
-            datestring += "_";
-        else if (n < 5)
-            datestring += "-";
-    }
+			if (n == 2)
+				datestring += "_";
+			else if (n < 5)
+				datestring += "-";
+		}
 
-    AccessClass::getControlPanel()->setDateText(datestring);
+		AccessClass::getControlPanel()->setDateText(datestring);
 
-    filename += datestring;
+		filename += datestring;
+	}
+    
     filename += AccessClass::getControlPanel()->getTextToAppend();
 
     return filename;
@@ -348,7 +352,7 @@ void RecordNode::setParameter(int parameterIndex, float newValue)
 		m_recordThread->setFirstBlockFlag(false);
 
 		setFirstBlock = false;
-		m_recordThread->startThread();
+		m_recordThread->startThread(9);
 
 		isRecording = true;
 		hasRecorded = true;

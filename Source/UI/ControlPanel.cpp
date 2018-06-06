@@ -1060,7 +1060,7 @@ String ControlPanel::getTextToPrepend()
 {
     String t = prependText->getText();
 
-    if (t.length() > 0)
+    if (t.length() > 0 && t.length() < 25)
     {
         return t + "_";
     }
