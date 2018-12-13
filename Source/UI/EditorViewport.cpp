@@ -236,6 +236,11 @@ void EditorViewport::itemDropped(const SourceDetails& dragSourceDetails)
 	var descr = dragSourceDetails.description;
 	Array<var>* description = descr.getArray();
 
+	//wuyq 内部移动的情况下，忽略
+	if (description->size() == 0)
+	{
+		return;
+	}
     if (canEdit)
     {
 
@@ -882,7 +887,7 @@ void EditorViewport::mouseDrag(const MouseEvent& e)
 
 
     if (editorArray.contains((GenericEditor*) e.originalComponent)
-        && e.y < 15
+        && e.y < 30
         && canEdit
         && editorArray.size() > 1)
     {
@@ -928,6 +933,35 @@ void EditorViewport::mouseDrag(const MouseEvent& e)
 
         refreshEditors();
         repaint();
+
+		//wuyq 构建一个移动的小图标，比较清晰的知道现在在移动啥
+		DragAndDropContainer* const dragContainer
+			= DragAndDropContainer::findParentDragContainerFor(this);
+		if (dragContainer != 0)
+		{
+			//pos.setSize (pos.getWidth(), 10);
+
+			GenericEditor* movingEdit = editorArray[indexOfMovingComponent];
+			
+			juce::Image dragImage(juce::Image::ARGB, 120, 15, true);
+
+			Graphics g(dragImage);
+			g.setColour(movingEdit->getBackgroundColor());
+			g.fillAll();
+			g.setColour(Colours::white);
+			g.setFont(14);
+			g.drawSingleLineText(movingEdit->getName(), 10, 12);//,75,15,Justification::centredRight,true);
+
+			dragImage.multiplyAllAlphas(0.6f);
+
+			Point<int> imageOffset(20, 10);
+
+			//See ProcessorGraph::createProcesorFromDescription for description info
+			Array<var> dragData;
+
+			dragContainer->startDragging(dragData, this,
+				dragImage, true, &imageOffset);
+		}
     }
 
 }
