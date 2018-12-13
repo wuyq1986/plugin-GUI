@@ -30,7 +30,7 @@
 #include "../ProcessorGraph/ProcessorGraph.h"
 #include "../../UI/GraphViewer.h"
 
-ChannelSelector::ChannelSelector(bool createButtons, Font& titleFont_) :
+ChannelSelector::ChannelSelector(bool createButtons, Font& titleFont_, bool a, bool r, bool p) :
 eventsOnly(false), paramsToggled(true), paramsActive(true),
 recActive(true), radioStatus(false), isNotSink(createButtons),
 moveRight(false), moveLeft(false), offsetLR(0), offsetUD(0), desiredOffset(0), titleFont(titleFont_), acquisitionIsActive(false)
@@ -39,21 +39,45 @@ moveRight(false), moveLeft(false), offsetLR(0), offsetUD(0), desiredOffset(0), t
     // initialize buttons
     audioButton = new EditorButton("AUDIO", titleFont);
     audioButton->addListener(this);
-    addAndMakeVisible(audioButton);
+	if (a) 
+	{
+		addAndMakeVisible(audioButton);
+	}
+    
     if (!createButtons)
         audioButton->setState(false);
     
     recordButton = new EditorButton("REC", titleFont);
     recordButton->addListener(this);
-    addAndMakeVisible(recordButton);
+	if (r)
+	{
+		addAndMakeVisible(recordButton);
+	}
+    
     if (!createButtons)
         recordButton->setState(false);
     
     paramsButton = new EditorButton("PARAM", titleFont);
     paramsButton->addListener(this);
-    addAndMakeVisible(paramsButton);
+	if (p)
+	{
+		addAndMakeVisible(paramsButton);
+	}
     
-    paramsButton->setToggleState(true, dontSendNotification);
+	//wuyq 设置默认选中
+	if (p) 
+	{
+		paramsButton->setToggleState(true, dontSendNotification);
+	}
+	else if (r)
+	{
+		recordButton->setToggleState(true, dontSendNotification);
+	}
+	else if (a)
+	{
+		audioButton->setToggleState(true, dontSendNotification);
+	}
+    
     
     audioButtons.clear();
     recordButtons.clear();
@@ -215,9 +239,25 @@ void ChannelSelector::refreshButtonBoundaries()
     int w = getWidth()/3;
     int h = 15;
     
-    audioButton->setBounds(0, 0, w, h);
-    recordButton->setBounds(w, 0, w, h);
-    paramsButton->setBounds(w*2, 0, w, h);
+	//wuyq 重新布局
+	int left = 0;
+	if (audioButton->isVisible())
+	{
+		audioButton->setBounds(0, 0, w, h);
+		left += w;
+	}
+	if (recordButton->isVisible())
+	{
+		recordButton->setBounds(left, 0, w, h);
+		left += w;
+	}
+	if (paramsButton->isVisible())
+	{
+		paramsButton->setBounds(left, 0, w, h);
+	}
+    
+    
+    
     
     allButton->setBounds(0, getHeight()-15, getWidth()/2, 15);
     noneButton->setBounds(getWidth()/2, getHeight()-15, getWidth()/2, 15);

@@ -380,8 +380,10 @@ ControlPanel::ControlPanel(ProcessorGraph* graph_, AudioComponent* audio_)
         // font.setHeight(15);
     }
 
+	
     audioEditor = (AudioEditor*) graph->getAudioNode()->createEditor();
-    addAndMakeVisible(audioEditor);
+	//wuyq
+    //addAndMakeVisible(audioEditor);
 
     playButton = new PlayButton();
     playButton->addListener(this);
@@ -394,11 +396,13 @@ ControlPanel::ControlPanel(ProcessorGraph* graph_, AudioComponent* audio_)
     masterClock = new Clock();
     addAndMakeVisible(masterClock);
 
-    cpuMeter = new CPUMeter();
-    addAndMakeVisible(cpuMeter);
+	//wuyq
+    //cpuMeter = new CPUMeter();
+    //addAndMakeVisible(cpuMeter);
 
-    diskMeter = new DiskSpaceMeter();
-    addAndMakeVisible(diskMeter);
+	//wuyq
+    //diskMeter = new DiskSpaceMeter();
+    //addAndMakeVisible(diskMeter);
 
     cpb = new ControlPanelButton(this);
     addAndMakeVisible(cpb);
@@ -632,7 +636,8 @@ void ControlPanel::resized()
     if (offset2 > h)
         offset2 = h;
 
-    if (cpuMeter != 0)
+	//wuyq
+    /*if (cpuMeter != 0)
     {
 
         if (getWidth() < 750 && getWidth() >= 570)
@@ -662,7 +667,7 @@ void ControlPanel::resized()
             audioEditor->setBounds(8,0+offset2,h*8,h);
         else
             audioEditor->setBounds(h*7,0,h*8,h);
-    }
+    }*/
 
 
     if (cpb != 0)
@@ -953,6 +958,7 @@ void ControlPanel::timerCallback()
 
 void ControlPanel::refreshMeters()
 {
+	/* wuyq
     if (playButton->getToggleState())
     {
         cpuMeter->updateCPU(audio->deviceManager.getCpuUsage());
@@ -962,12 +968,12 @@ void ControlPanel::refreshMeters()
         cpuMeter->updateCPU(0.0f);
     }
 
-    cpuMeter->repaint();
+    cpuMeter->repaint();*/
 
     masterClock->repaint();
-
+	/*wuyq
     diskMeter->updateDiskSpace(graph->getRecordNode()->getFreeSpace());
-    diskMeter->repaint();
+    diskMeter->repaint();*/
 
     if (initialize)
     {

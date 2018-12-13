@@ -48,6 +48,8 @@ public:
 
     Visualizer* createNewCanvas();
 
+	//wuyq
+	bool shouldShowChannelSelector();      //是否显示通道设定
 private:
 
 

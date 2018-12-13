@@ -30,6 +30,8 @@
 #endif
 
 #include <ProcessorHeaders.h>
+#include "../../Processors/Editors/GenericEditor.h"
+#include "../../Processors/Editors/ChannelSelector.h"
 
 /**
 
@@ -42,6 +44,12 @@
 
 	
 */
+class CAREditor : public GenericEditor
+{
+public:
+	CAREditor(GenericProcessor* owner, bool useDefaultParameterEditors);
+	void setDefaultRecordStatus(int index);
+};
 
 class CAR : public GenericProcessor
 
@@ -84,6 +92,9 @@ public:
         this method while data acquisition is active. If they are modified in any
         other way, the application will crash.  */
     void setParameter(int parameterIndex, float newValue);
+
+	//wuyq øÿ÷∆audio rec paramµƒœ‘ æ
+	AudioProcessorEditor* createEditor();
 
     AudioSampleBuffer avgBuffer;
 

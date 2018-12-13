@@ -70,43 +70,59 @@ void SelectorButton::paintButton(Graphics& g, bool isMouseOver, bool isButtonDow
 }
 
 
-VisualizerEditor::VisualizerEditor(GenericProcessor* parentNode, int width, bool useDefaultParameterEditors=true)
+VisualizerEditor::VisualizerEditor(GenericProcessor* parentNode, int width, bool useDefaultParameterEditors = true)
     : GenericEditor(parentNode, useDefaultParameterEditors=true),
       dataWindow(0), canvas(0), tabText("Tab"), isPlaying(false), tabIndex(-1)
 {
 
     desiredWidth = width;
 
-    initializeSelectors();
+	initializeSelectors(true);
 }
 
+VisualizerEditor::VisualizerEditor(GenericProcessor* parentNode, bool useDefaultParameterEditors = true)
+	: GenericEditor(parentNode, useDefaultParameterEditors),
+	dataWindow(nullptr), canvas(nullptr), isPlaying(false), tabIndex(-1)
+{
 
-VisualizerEditor::VisualizerEditor(GenericProcessor* parentNode, bool useDefaultParameterEditors=true)
+	desiredWidth = 180;
+	initializeSelectors(true);
+
+}
+
+VisualizerEditor::VisualizerEditor(GenericProcessor* parentNode, bool useDefaultParameterEditors = true, bool showButtonSelector = true)
     : GenericEditor(parentNode, useDefaultParameterEditors),
       dataWindow(nullptr), canvas(nullptr), isPlaying(false), tabIndex(-1)
 {
 
     desiredWidth = 180;
-    initializeSelectors();
+	initializeSelectors(showButtonSelector);
 
 }
 
-void VisualizerEditor::initializeSelectors()
+void VisualizerEditor::initializeSelectors(bool showButtonSelector)
 {
+	
+		windowSelector = new SelectorButton("window");
+		windowSelector->addListener(this);
+		if (showButtonSelector)
+		{
+			windowSelector->setBounds(desiredWidth - 40, 7, 14, 10);
 
-    windowSelector = new SelectorButton("window");
-    windowSelector->addListener(this);
-    windowSelector->setBounds(desiredWidth - 40,7,14,10);
+			windowSelector->setToggleState(false, dontSendNotification);
+			addAndMakeVisible(windowSelector);
+		}
 
-    windowSelector->setToggleState(false, dontSendNotification);
-    addAndMakeVisible(windowSelector);
+		tabSelector = new SelectorButton("tab");
+		tabSelector->addListener(this);
+		if (showButtonSelector)
+		{
+			tabSelector->setBounds(desiredWidth - 20, 7, 15, 10);
 
-    tabSelector = new SelectorButton("tab");
-    tabSelector->addListener(this);
-    tabSelector->setBounds(desiredWidth - 20,7,15,10);
-
-    addAndMakeVisible(tabSelector);
-    tabSelector->setToggleState(false, dontSendNotification);
+			addAndMakeVisible(tabSelector);
+			tabSelector->setToggleState(false, dontSendNotification);
+		}
+	
 }
 
 VisualizerEditor::~VisualizerEditor()

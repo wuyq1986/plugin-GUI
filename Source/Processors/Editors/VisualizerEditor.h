@@ -62,8 +62,9 @@ private:
 class PLUGIN_API VisualizerEditor : public GenericEditor
 {
 public:
-    VisualizerEditor(GenericProcessor*, int, bool useDefaultParameterEditors);
-    VisualizerEditor(GenericProcessor*, bool useDefaultParameterEditors);
+	VisualizerEditor(GenericProcessor*, int, bool useDefaultParameterEditors);
+	VisualizerEditor(GenericProcessor*, bool useDefaultParameterEditors);
+	VisualizerEditor(GenericProcessor*, bool useDefaultParameterEditors, bool showButtonSelector);
     ~VisualizerEditor();
 
     void buttonEvent(Button* button);
@@ -89,10 +90,9 @@ public:
     ScopedPointer<Visualizer> canvas;
 
     String tabText;
-
 private:
 
-    void initializeSelectors();
+	void initializeSelectors(bool showButtonSelector);
     bool isPlaying;
 
     SelectorButton* windowSelector;

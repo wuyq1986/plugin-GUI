@@ -28,8 +28,9 @@
 #include "../SourceNode/SourceNode.h"
 
 /** Includes for builtin processors **/
-#include "../FileReader/FileReader.h"
-#include "../Merger/Merger.h"
+//wuyq
+//#include "../FileReader/FileReader.h"
+//#include "../Merger/Merger.h"
 #include "../Splitter/Splitter.h"
 #include "../DataThreads/RhythmNode/RHD2000Thread.h"
 
@@ -54,18 +55,20 @@ namespace ProcessorManager
 			name = "Rhythm FPGA";
 			type = SourceProcessor;
 			break;
-		case 1:
-			name = "Merger";
-			type = UtilityProcessor;
-			break;
+			//wuyq
+		//case 1:
+		//	name = "Merger";
+		//	type = UtilityProcessor;
+		//	break;
 		case 2:
 			name = "Splitter";
 			type = UtilityProcessor;
 			break;
-		case 3:
-			name = "File Reader";
-			type = SourceProcessor;
-			break;
+			//wuyq
+		//case 3:
+		//	name = "File Reader";
+		//	type = SourceProcessor;
+		//	break;
 		default:
 			name = String::empty;
 			type = -1;
@@ -85,15 +88,17 @@ namespace ProcessorManager
 		case 0:
 			proc = new SourceNode("Rhythm FPGA", &RHD2000Thread::createDataThread);
 			break;
-		case 1:
-			proc = new Merger();
-			break;
+			//wuyq
+		//case 1:
+		//	proc = new Merger();
+		//	break;
 		case 2:
 			proc = new Splitter();
 			break;
-		case 3:
-			proc = new FileReader();
-			break;
+			//wuyq
+		//case 3:
+		//	proc = new FileReader();
+		//	break;
 		default:
 			return nullptr;
 		}

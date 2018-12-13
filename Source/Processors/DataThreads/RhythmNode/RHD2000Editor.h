@@ -190,6 +190,10 @@ public:
 
 	void handleAsyncUpdate();
 
+	//wuyq
+	bool shouldShowChannelSelector();      //是否显示通道设定
+	void setDefaultRecordStatus(int index);  //设置默认选中状态
+
 private:
 
     OwnedArray<HeadstageOptionsInterface> headstageOptionsInterfaces;

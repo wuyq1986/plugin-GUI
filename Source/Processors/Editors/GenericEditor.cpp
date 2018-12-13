@@ -36,13 +36,22 @@
 #ifndef M_PI
 #define M_PI 3.14159265359
 #endif
-GenericEditor::GenericEditor(GenericProcessor* owner, bool useDefaultParameterEditors=true)
+GenericEditor::GenericEditor(GenericProcessor* owner, bool useDefaultParameterEditors = true)
     : AudioProcessorEditor(owner),
       desiredWidth(150), isFading(false), accumulator(0.0), acquisitionIsActive(false),
       drawerButton(0), drawerWidth(170),
-      drawerOpen(false), channelSelector(0), isSelected(false), isEnabled(true), isCollapsed(false), tNum(-1)
+	  drawerOpen(false), channelSelector(0), isSelected(false), isEnabled(true), isCollapsed(false), tNum(-1)
 {
-    constructorInitialize(owner, useDefaultParameterEditors);
+    constructorInitialize(owner, useDefaultParameterEditors,true,true,true);
+}
+
+GenericEditor::GenericEditor(GenericProcessor* owner, bool useDefaultParameterEditors = true, bool a = true, bool r = true, bool p = true)
+	: AudioProcessorEditor(owner),
+	desiredWidth(150), isFading(false), accumulator(0.0), acquisitionIsActive(false),
+	drawerButton(0), drawerWidth(170),
+	drawerOpen(false), channelSelector(0), isSelected(false), isEnabled(true), isCollapsed(false), tNum(-1)
+{
+	constructorInitialize(owner, useDefaultParameterEditors,a,r,p);
 }
 
 
@@ -62,7 +71,7 @@ GenericEditor::~GenericEditor()
     deleteAllChildren();
 }
 
-void GenericEditor::constructorInitialize(GenericProcessor* owner, bool useDefaultParameterEditors)
+void GenericEditor::constructorInitialize(GenericProcessor* owner, bool useDefaultParameterEditors, bool a = true, bool r = true, bool p = true)
 {
 
     name = getAudioProcessor()->getName();
@@ -84,11 +93,11 @@ void GenericEditor::constructorInitialize(GenericProcessor* owner, bool useDefau
 
         if (!owner->isSink())
         {
-            channelSelector = new ChannelSelector(true, titleFont);
+            channelSelector = new ChannelSelector(true, titleFont,a,r,p);
         }
         else
         {
-            channelSelector = new ChannelSelector(false, titleFont);
+            channelSelector = new ChannelSelector(false, titleFont,a,r,p);
         }
 
         addChildComponent(channelSelector);
@@ -501,10 +510,12 @@ void GenericEditor::update()
         {
             // std::cout << p->channels[i]->getRecordState() << std::endl;
             channelSelector->setRecordStatus(i, p->channels[i]->getRecordState());
+			//wuyq ÉèÖÃÄ¬ÈÏÖµ
+			setDefaultRecordStatus(i);
         }
     }
 
-    if (numChannels == 0)
+    if (numChannels == 0 || !shouldShowChannelSelector())
     {
         if (drawerButton != 0)
             drawerButton->setVisible(false);
@@ -1166,6 +1177,15 @@ Array<GenericEditor*> GenericEditor::getConnectedEditors()
     return a;
 }
 
+bool GenericEditor::shouldShowChannelSelector()
+{
+	return true;
+}
+
+void GenericEditor::setDefaultRecordStatus(int index)
+{
+
+}
 
 /***************************/
 ColorButton::ColorButton(String label_, Font font_) :

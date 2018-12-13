@@ -92,3 +92,23 @@ void CAR::process(AudioSampleBuffer& buffer,
     }
 
 }
+
+AudioProcessorEditor* CAR::createEditor()
+{
+	editor = new CAREditor(this, true);
+	return editor;
+}
+
+
+/////////////////////////////////////
+/////////////////////////////////////
+CAREditor::CAREditor(GenericProcessor* owner, bool useDefaultParameterEditors = true) : GenericEditor(owner, true, false,true,false)
+{
+
+}
+void CAREditor::setDefaultRecordStatus(int index)
+{
+	channelSelector->setAudioStatus(index, false);
+	channelSelector->setRecordStatus(index, false);
+	channelSelector->setParamStatus(index, false);
+}

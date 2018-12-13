@@ -37,15 +37,16 @@
 	addAndMakeVisible(messageCenterEditor);
 	std::cout << "Created message center." << std::endl;
 
-	infoLabel = new InfoLabel();
-	std::cout << "Created info label." << std::endl;
+	//wuyq
+	//infoLabel = new InfoLabel();
+	//std::cout << "Created info label." << std::endl;
 
 	graphViewer = new GraphViewer();
 	std::cout << "Created graph viewer." << std::endl;
 
 	dataViewport = new DataViewport();
 	addChildComponent(dataViewport);
-	dataViewport->addTabToDataViewport("Info", infoLabel,0);
+	//dataViewport->addTabToDataViewport("Info", infoLabel,0);
 	dataViewport->addTabToDataViewport("Graph", graphViewer,0);
 
 	std::cout << "Created data viewport." << std::endl;
@@ -67,7 +68,8 @@
 	processorList = new ProcessorList();
 	processorListViewport.setViewedComponent(processorList,false);
 	processorListViewport.setScrollBarsShown(true,false);
-	addAndMakeVisible(&processorListViewport);
+	//wuyq Òþ²Ø×ó±ßµÄProcessors
+	//addAndMakeVisible(&processorListViewport);
 	processorList->setVisible(true);
 	processorList->setBounds(0,0,195,processorList->getTotalHeight());
 	std::cout << "Created filter list." << std::endl;
@@ -86,6 +88,8 @@
 
 	processorGraph->updatePointers(); // needs to happen after processorGraph gets the right pointers
 
+	//wuyq  Ìî³äÄ¬ÈÏµÄprocessors
+	editorViewport->fillDefaultProcessors();
 #if JUCE_MAC
 	MenuBarModel::setMacMainMenu(this);
 	mainWindow->setMenuBar(0);
@@ -199,18 +203,24 @@ void UIComponent::resized()
 
 	if (controlPanel != 0)
 	{
-
-		int controlPanelWidth = w-210;
+		//wuyq 
+		//int controlPanelWidth = w-210;
+		int controlPanelWidth = w - 8;
+	
 		int addHeight = 0;
 		int leftBound;
 
+		//wuyq 
+		leftBound = 0;
 		if (w >= 460)
 		{
-			leftBound = 202;
+			//wuyq
+			//leftBound = 202;
 		}
 		else
 		{
-			leftBound = w-258;
+			//wuyq
+			//leftBound = w-258;
 			controlPanelWidth = w-leftBound;
 		}
 
@@ -236,7 +246,9 @@ void UIComponent::resized()
 			controlPanel->setBounds(leftBound,6,controlPanelWidth,32+addHeight);
 	}
 
-	if (processorList != 0)
+	//wuyq Òþ²Ø×ó±ßµÄProcessors
+	processorListViewport.setVisible(false);
+	/*if (processorList != 0)
 	{
 		if (processorList->isOpen())
 		{
@@ -257,7 +269,7 @@ void UIComponent::resized()
 
 		if (w < 460)
 			processorListViewport.setBounds(5-460+getWidth(),5,195,processorList->getHeight());
-	}
+	}*/
 
 	if (dataViewport != 0)
 	{

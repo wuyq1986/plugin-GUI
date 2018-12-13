@@ -27,7 +27,7 @@
 
 
 FilterEditor::FilterEditor(GenericProcessor* parentNode, bool useDefaultParameterEditors=true)
-    : GenericEditor(parentNode, useDefaultParameterEditors)
+    : GenericEditor(parentNode, useDefaultParameterEditors,false,true,false)
 
 {
     desiredWidth = 150;
@@ -67,20 +67,22 @@ FilterEditor::FilterEditor(GenericProcessor* parentNode, bool useDefaultParamete
     highCutValue->setTooltip("Set the high cut for the selected channels");
     addAndMakeVisible(highCutValue);
 
+	//wuyq вўВи+ADCs
     applyFilterOnADC = new UtilityButton("+ADCs",Font("Default", 10, Font::plain));
     applyFilterOnADC->addListener(this);
-    applyFilterOnADC->setBounds(90,70,40,18);
+    //applyFilterOnADC->setBounds(90,70,40,18);
     applyFilterOnADC->setClickingTogglesState(true);
     applyFilterOnADC->setTooltip("When this button is off, ADC channels will not be filtered");
-    addAndMakeVisible(applyFilterOnADC);
+    //addAndMakeVisible(applyFilterOnADC);
 
+	//wuyq вўВи+CH
     applyFilterOnChan = new UtilityButton("+CH",Font("Default", 10, Font::plain));
     applyFilterOnChan->addListener(this);
-    applyFilterOnChan->setBounds(95,95,30,18);
+    //applyFilterOnChan->setBounds(95,95,30,18);
     applyFilterOnChan->setClickingTogglesState(true);
     applyFilterOnChan->setToggleState(true, dontSendNotification);
     applyFilterOnChan->setTooltip("When this button is off, selected channels will not be filtered");
-    addAndMakeVisible(applyFilterOnChan);
+    //addAndMakeVisible(applyFilterOnChan);
 
 }
 
@@ -97,7 +99,12 @@ void FilterEditor::setDefaults(double lowCut, double highCut)
     highCutValue->setText(lastHighCutString, dontSendNotification);
     lowCutValue->setText(lastLowCutString, dontSendNotification);
 }
-
+void FilterEditor::setDefaultRecordStatus(int index)
+{
+	channelSelector->setAudioStatus(index, false);
+	channelSelector->setRecordStatus(index, false);
+	channelSelector->setParamStatus(index, false);
+}
 
 void FilterEditor::labelTextChanged(Label* label)
 {

@@ -54,7 +54,9 @@ public Timer
 public:
     
     /** constructor */
-    ChannelSelector(bool createButtons, Font& titleFont);
+	//wuyq
+	//为了控制AUDIO，REC, PARAM的显示/隐藏，以及各通道默认值
+    ChannelSelector(bool createButtons, Font& titleFont, bool a = true, bool r = true, bool p = true);
     
     /** destructor */
     ~ChannelSelector();
@@ -193,7 +195,6 @@ private:
     bool acquisitionIsActive;
     
     ChannelSelectorRegion* channelSelectorRegion;
-    
 };
 
 /**

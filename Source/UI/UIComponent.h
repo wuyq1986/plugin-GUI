@@ -25,7 +25,8 @@
 #define __UICOMPONENT_H_D97C73CF__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "InfoLabel.h"
+//wuyq
+//#include "InfoLabel.h"
 #include "ControlPanel.h"
 #include "ProcessorList.h"
 #include "EditorViewport.h"
@@ -148,7 +149,8 @@ private:
     ScopedPointer<ProcessorList> processorList;
     ScopedPointer<ControlPanel> controlPanel;
     MessageCenterEditor* messageCenterEditor; // owned by ProcessorGraph
-    ScopedPointer<InfoLabel> infoLabel;
+	//wuyq
+    //ScopedPointer<InfoLabel> infoLabel;
     ScopedPointer<GraphViewer> graphViewer;
 	ScopedPointer<PluginManager> pluginManager;
 
@@ -170,6 +172,7 @@ private:
     /** Resizes all of components inside the UIComponent to fit the new boundaries
     of the MainWindow, or to account for opening/closing events.*/
     void resized();
+
 
     /** Contains codes for common user commands to which the application must react.*/
     enum CommandIDs

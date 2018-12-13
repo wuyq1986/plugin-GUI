@@ -50,6 +50,10 @@ SpikeDisplayEditor::~SpikeDisplayEditor()
     deleteAllChildren();
 }
 
+bool SpikeDisplayEditor::shouldShowChannelSelector()
+{
+	return false;
+}
 void SpikeDisplayEditor::initializeButtons()
 {
     int w = 18;

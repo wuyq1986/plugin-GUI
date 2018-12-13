@@ -63,4 +63,8 @@ void LfpDisplayEditor::buttonCallback(Button* button)
     }
 
 }
-
+//wuyq
+bool LfpDisplayEditor::shouldShowChannelSelector()
+{
+	return false;
+}

@@ -63,7 +63,9 @@ class PLUGIN_API GenericEditor : public AudioProcessorEditor,
 public:
     /** Constructor. Loads fonts and creates default buttons.
      useDefaultParameter Editors false means custom parameter editors will be used.*/
-    GenericEditor(GenericProcessor* owner, bool useDefaultParameterEditors);
+	GenericEditor(GenericProcessor* owner, bool useDefaultParameterEditors);
+	//wuyq 控制 AUDIO REC PARAM 3个的显示
+	GenericEditor(GenericProcessor* owner, bool useDefaultParameterEditors, bool a, bool r, bool p);
 
     /** Constructor. Loads fonts and creates default buttons.*/
     //GenericEditor (GenericProcessor* owner);
@@ -290,6 +292,10 @@ public:
     /** Returns an array of record statuses for all channels. Used by GraphNode */
     Array<bool> getRecordStatusArray();
 
+	//wuyq 是否需要显示channel selector
+	virtual bool shouldShowChannelSelector();
+	//wuyq 每个channel 的默认状态
+	virtual void setDefaultRecordStatus(int i);
 protected:
 
     /** A pointer to the button that opens the drawer for the ChannelSelector. */
@@ -337,7 +343,7 @@ private:
     int originalWidth;
 
     /**initializing function Used to share constructor functions*/
-    void constructorInitialize(GenericProcessor* owner, bool useDefaultParameterEditors);
+    void constructorInitialize(GenericProcessor* owner, bool useDefaultParameterEditors, bool a, bool r, bool p);
 
     String name;
     String displayName;

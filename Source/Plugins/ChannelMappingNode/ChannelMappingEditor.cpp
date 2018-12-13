@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ChannelMappingEditor::ChannelMappingEditor(GenericProcessor* parentNode, bool useDefaultParameterEditors=true)
-    : GenericEditor(parentNode, useDefaultParameterEditors), previousChannelCount(0), isConfigured(false)
+    : GenericEditor(parentNode, useDefaultParameterEditors,false,true,false), previousChannelCount(0), isConfigured(false)
 
 {
     desiredWidth = 350;
@@ -219,6 +219,13 @@ void ChannelMappingEditor::createElectrodeButtons(int numNeeded, bool clearPrevi
         upButton->setVisible(false);
         downButton->setVisible(false);
     }
+}
+
+void ChannelMappingEditor::setDefaultRecordStatus(int index)
+{
+	channelSelector->setAudioStatus(index, false);
+	channelSelector->setRecordStatus(index, false);
+	channelSelector->setParamStatus(index, false);
 }
 
 void ChannelMappingEditor::refreshButtonLocations()

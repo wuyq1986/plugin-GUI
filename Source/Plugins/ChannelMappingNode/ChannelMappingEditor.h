@@ -72,6 +72,8 @@ public:
     String writePrbFile(File filename);
     String loadPrbFile(File filename);
 
+	//wuyq 设置默认选中状态
+	void setDefaultRecordStatus(int index);
 private:
 
     void setChannelReference(ElectrodeButton* button);

@@ -172,6 +172,9 @@ public:
 
     File currentFile;
 
+	//wuyq
+	void fillDefaultProcessors();
+
 private:
 
     String message;

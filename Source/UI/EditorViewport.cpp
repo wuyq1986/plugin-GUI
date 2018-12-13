@@ -707,7 +707,8 @@ void EditorViewport::mouseDown(const MouseEvent& e)
 
             if (e.getNumberOfClicks() == 2) // double-clicks toggle collapse state
             {
-                if (editorArray[i]->getCollapsedState())
+				//wuyq ÆÁ±ÎË«»÷ÕÛµþÐ§¹û
+                /*if (editorArray[i]->getCollapsedState())
                 {
                     editorArray[i]->switchCollapsedState();
                 }
@@ -717,13 +718,16 @@ void EditorViewport::mouseDown(const MouseEvent& e)
                     {
                         editorArray[i]->switchCollapsedState();
                     }
-                }
+                }*/
                 return;
             }
 
+			
             if (e.mods.isRightButtonDown())
             {
-
+				//wuyq ÆÁ±ÎÓÒ¼ü
+				return;
+				/*
                 if (!editorArray[i]->getCollapsedState() && e.y > 22)
                     return;
 
@@ -772,6 +776,7 @@ void EditorViewport::mouseDown(const MouseEvent& e)
                     refreshEditors();
                     return;
                 }
+				*/
             }
 
             // make sure uncollapsed editors don't accept clicks outside their title bar
@@ -941,6 +946,9 @@ void EditorViewport::mouseUp(const MouseEvent& e)
 
         signalChainManager->updateVisibleEditors(editor, indexOfMovingComponent,
                                                  insertionPoint, MOVE);
+
+		//wuyq ¸üÐÂGraph»­ÃæµÄË³Ðò
+		AccessClass::getGraphViewer()->updateNodeLocations();
         refreshEditors();
         repaint();
 
@@ -1045,6 +1053,89 @@ void EditorViewport::buttonClicked(Button* button)
             refreshEditors();
         }
     }
+}
+
+//wuyq
+void EditorViewport::fillDefaultProcessors()
+{
+	//Rhythm FPGA
+	//Common Avg Ref
+	//Bandpass Filter
+	//Channel Map
+	//Splitter
+	//Spike Detector    LFP Viewer
+	//Spike Viewer
+	GenericEditor* activeEditor1 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
+		AccessClass::getProcessorList()->getItemInfo(juce::String("Sources"), juce::String("Rhythm FPGA")), currentId);
+	activeEditor1->refreshColors();
+	addChildComponent(activeEditor1);
+	signalChainManager->updateVisibleEditors(activeEditor1, -1, 0, ADD);
+	AccessClass::getGraphViewer()->addNode(activeEditor1);
+	currentId++;
+
+
+	GenericEditor* activeEditor2 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
+		AccessClass::getProcessorList()->getItemInfo(juce::String("Filters"), juce::String("Common Avg Ref")), currentId);
+	activeEditor2->refreshColors();
+	addChildComponent(activeEditor2);
+	signalChainManager->updateVisibleEditors(activeEditor2, -1, 1, ADD);
+	AccessClass::getGraphViewer()->addNode(activeEditor2);
+	currentId++;
+
+	GenericEditor* activeEditor3 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
+		AccessClass::getProcessorList()->getItemInfo(juce::String("Filters"), juce::String("Bandpass Filter")), currentId);
+	activeEditor3->refreshColors();
+	addChildComponent(activeEditor3);
+	signalChainManager->updateVisibleEditors(activeEditor3, -1, 2, ADD);
+	AccessClass::getGraphViewer()->addNode(activeEditor3);
+	currentId++;
+
+
+	GenericEditor* activeEditor4 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
+		AccessClass::getProcessorList()->getItemInfo(juce::String("Filters"), juce::String("Channel Map")), currentId);
+	activeEditor4->refreshColors();
+	addChildComponent(activeEditor4);
+	signalChainManager->updateVisibleEditors(activeEditor4, -1, 3, ADD);
+	AccessClass::getGraphViewer()->addNode(activeEditor4);
+	currentId++;
+
+	GenericEditor* activeEditor5 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
+		AccessClass::getProcessorList()->getItemInfo(juce::String("Utilities"), juce::String("Splitter")), currentId);
+	activeEditor5->refreshColors();
+	addChildComponent(activeEditor5);
+	signalChainManager->updateVisibleEditors(activeEditor5, -1, 4, ADD);
+	AccessClass::getGraphViewer()->addNode(activeEditor5);
+	currentId++;
+
+	GenericEditor* activeEditor6 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
+		AccessClass::getProcessorList()->getItemInfo(juce::String("Filters"), juce::String("Spike Detector")), currentId);
+	activeEditor6->refreshColors();
+	addChildComponent(activeEditor6);
+	signalChainManager->updateVisibleEditors(activeEditor6, -1, 5, ADD);
+	AccessClass::getGraphViewer()->addNode(activeEditor6);
+	currentId++;
+
+	GenericEditor* activeEditor7 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
+		AccessClass::getProcessorList()->getItemInfo(juce::String("Sinks"), juce::String("Spike Viewer")), currentId);
+	activeEditor7->refreshColors();
+	addChildComponent(activeEditor7);
+	signalChainManager->updateVisibleEditors(activeEditor7, -1, 6, ADD);
+	AccessClass::getGraphViewer()->addNode(activeEditor7);
+	currentId++;
+
+	SplitterEditor* editor = (SplitterEditor*)activeEditor5->getProcessor()->getEditor();
+	editor->switchDest(1);
+
+	GenericEditor* activeEditor8 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
+		AccessClass::getProcessorList()->getItemInfo(juce::String("Sinks"), juce::String("LFP Viewer")), currentId);
+	activeEditor8->refreshColors();
+	addChildComponent(activeEditor8);
+	signalChainManager->updateVisibleEditors(activeEditor8, -1, 5, ADD);
+	AccessClass::getGraphViewer()->addNode(activeEditor8);
+	currentId++;
+
+	refreshEditors();
+
 }
 
 ///////////////////////////////////////////////////////////////////

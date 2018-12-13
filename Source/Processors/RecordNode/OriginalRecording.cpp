@@ -260,7 +260,9 @@ String OriginalRecording::getFileName(Channel* ch)
 {
     String filename;
 
-    filename += ch->nodeId;
+	//wuyq
+    //filename += ch->nodeId;
+	filename += ch->processor->getName();
     filename += "_";
     if (renameFiles)
         filename += renamedPrefix + String(ch->mappedIndex + 1);

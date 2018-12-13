@@ -54,6 +54,9 @@ public:
 
     void channelChanged(int chan);
 
+	//wuyq设置默认选中
+	void setDefaultRecordStatus(int index);
+
 private:
 
     String lastHighCutString;

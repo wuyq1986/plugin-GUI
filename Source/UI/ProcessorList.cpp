@@ -647,6 +647,39 @@ void ProcessorList::fillItemList()
 
 }
 
+//wuyq
+Array<var> ProcessorList::getItemInfo(String parentName, String itemName)
+{
+	ProcessorListItem *findItem = nullptr;
+	bool find = false;
+	for (int i = 0; i < baseItem->getNumSubItems(); i++) {
+		for (int j = 0; j < baseItem->getSubItem(i)->getNumSubItems(); j++) {
+			ProcessorListItem* item = baseItem->getSubItem(i)->getSubItem(j);
+			if (baseItem->getSubItem(i)->getSubItem(j)->getParentName().equalsIgnoreCase(parentName) &&
+				baseItem->getSubItem(i)->getSubItem(j)->getName().equalsIgnoreCase(itemName))
+			{
+				findItem = item;
+				find = true;
+				break;
+			}
+		}
+		if (find)
+		{
+			break;
+		}
+	}
+	Array<var> dragData;
+	if (findItem != nullptr)
+	{
+		dragData.add(true);
+		dragData.add(findItem->getName());
+		dragData.add(findItem->processorType);
+		dragData.add(findItem->processorId);
+		dragData.add(findItem->getParentName());
+	}
+	return dragData;
+}
+
 // ===================================================================
 
 	ProcessorListItem::ProcessorListItem(const String& name_, int pid, int ptype)

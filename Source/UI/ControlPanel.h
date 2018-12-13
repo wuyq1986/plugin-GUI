@@ -370,8 +370,9 @@ private:
     ScopedPointer<PlayButton> playButton;
 
     ScopedPointer<Clock> masterClock;
-    ScopedPointer<CPUMeter> cpuMeter;
-    ScopedPointer<DiskSpaceMeter> diskMeter;
+	//wuyq
+    //ScopedPointer<CPUMeter> cpuMeter;
+    //ScopedPointer<DiskSpaceMeter> diskMeter;
     ScopedPointer<FilenameComponent> filenameComponent;
     ScopedPointer<UtilityButton> newDirectoryButton;
     ScopedPointer<ControlPanelButton> cpb;

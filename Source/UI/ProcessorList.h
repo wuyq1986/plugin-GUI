@@ -88,6 +88,8 @@ public:
     to draw scroll bars.*/
     int getTotalHeight();
 
+	//wuyq
+	Array<var> getItemInfo(String parentName, String itemName);
 private:
 
     /** The main method for drawing the ProcessorList.*/
