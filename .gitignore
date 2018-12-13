@@ -117,3 +117,5 @@ Introjucer/Builds/MacOSX/build
 
 # 9. Plugin build dirs
 build/
+/Builds/VisualStudio2013/.vs/open-ephys/v15/.suo
+/Builds/VisualStudio2013/.vs/open-ephys/v15/Browse.VC.db
