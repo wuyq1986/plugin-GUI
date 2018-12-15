@@ -68,7 +68,7 @@ LfpDisplayCanvas::LfpDisplayCanvas(LfpDisplayNode* processor_) :
     addAndMakeVisible(timescale);
 
     //Ranges for neural data
-     voltageRanges[HEADSTAGE_CHANNEL].add("25");
+    voltageRanges[HEADSTAGE_CHANNEL].add("25");
     voltageRanges[HEADSTAGE_CHANNEL].add("50");
     voltageRanges[HEADSTAGE_CHANNEL].add("100");
     voltageRanges[HEADSTAGE_CHANNEL].add("250");
@@ -664,7 +664,7 @@ void LfpDisplayCanvas::refreshScreenBuffer()
 
 void LfpDisplayCanvas::updateScreenBuffer()
 {
-
+	//刷新页面
     // copy new samples from the displayBuffer into the screenBuffer
     int maxSamples = lfpDisplay->getWidth() - leftmargin;
 
@@ -677,7 +677,7 @@ void LfpDisplayCanvas::updateScreenBuffer()
             screenBufferIndex.set(channel, 0);
 
          // hold these values locally for each channel
-        int sbi = screenBufferIndex[channel];
+        int sbi = screenBufferIndex[channel];   //指示线
         int dbi = displayBufferIndex[channel];
 
         lastScreenBufferIndex.set(channel,sbi);
@@ -1563,8 +1563,9 @@ void LfpDisplay::mouseDown(const MouseEvent& event)
         }
     }
 
-    channels[closest]->select();
-    canvas->setSelectedType(channels[closest]->getType());
+	//wuyq 去掉鼠标单击效果，为后面的拖拉做准备
+    //channels[closest]->select();
+    //canvas->setSelectedType(channels[closest]->getType());
 
     if (event.getNumberOfClicks() == 2)
         toggleSingleChannel(closest);

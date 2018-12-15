@@ -70,7 +70,7 @@ void LfpDisplayNode::updateSettings()
             eventSourceNodes.add(eventChannels[i]->sourceNodeId);
 
         }
-    }\
+    }
 
     numEventChannels = eventSourceNodes.size();
 

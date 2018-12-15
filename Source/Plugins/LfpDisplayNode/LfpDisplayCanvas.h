@@ -86,7 +86,7 @@ public:
     const float getYCoordMean(int chan, int samp);
     const float getYCoordMax(int chan, int samp);
 
-    Array<int> screenBufferIndex;
+    Array<int> screenBufferIndex;   //当前时间针的X坐标
     Array<int> lastScreenBufferIndex;
 
     void comboBoxChanged(ComboBox* cb);
