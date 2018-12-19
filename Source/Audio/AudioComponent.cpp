@@ -27,8 +27,10 @@
 
 AudioComponent::AudioComponent() : isPlaying(false)
 {
+
     // if this is nonempty, we got an error
-    String error = deviceManager.initialise(0,  // numInputChannelsNeeded
+	//wuyq »•µÙ“Ù∆µ
+    /*String error = deviceManager.initialise(0,  // numInputChannelsNeeded
                                             2,  // numOutputChannelsNeeded
                                             0,  // *savedState (XmlElement)
                                             true, // selectDefaultDeviceOnFailure
@@ -107,7 +109,7 @@ AudioComponent::AudioComponent() : isPlaying(false)
 
     stopDevice(); // reduces the amount of background processing when
     // device is not in use
-
+	*/
 
 }
 

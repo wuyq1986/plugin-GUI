@@ -841,7 +841,8 @@ void RHD2000Thread::setDefaultChannelNames()
         }
     }
     //Aux channels
-    for (int i = 0; i < MAX_NUM_HEADSTAGES; i++)
+	//wuyq È¥µôÒôÆµ
+    /*for (int i = 0; i < MAX_NUM_HEADSTAGES; i++)
     {
         if (headstagesArray[i]->isPlugged())
         {
@@ -864,7 +865,7 @@ void RHD2000Thread::setDefaultChannelNames()
                 aux_counter++;
             }
         }
-    }
+    }*/
     //ADC channels
     if (acquireAdcChannels)
     {
@@ -911,13 +912,13 @@ int RHD2000Thread::getNumAuxOutputs()
 {
     int numAuxOutputs = 0;
 
-    for (int i = 0; i < MAX_NUM_HEADSTAGES; i++)
+    /*for (int i = 0; i < MAX_NUM_HEADSTAGES; i++)
     {
         if (headstagesArray[i]->isPlugged() > 0)
         {
             numAuxOutputs += 3;
         }
-    }
+    }*/
 
     return numAuxOutputs;
 

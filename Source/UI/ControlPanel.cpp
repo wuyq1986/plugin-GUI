@@ -795,8 +795,8 @@ void ControlPanel::buttonClicked(Button* button)
             {
                 if (recordEngines[recordSelector->getSelectedId()-1]->isWindowOpen())
                     recordEngines[recordSelector->getSelectedId()-1]->toggleConfigWindow();
-
-                audio->beginCallbacks();
+				//È¥µôÒôÆµ
+                //audio->beginCallbacks();
                 masterClock->start();
                 audioEditor->disable();
 
@@ -814,8 +814,8 @@ void ControlPanel::buttonClicked(Button* button)
             {
                 stopRecording();
             }
-
-            audio->endCallbacks();
+			//È¥µôÒôÆµ
+            //audio->endCallbacks();
             graph->disableProcessors();
             refreshMeters();
             masterClock->stop();
@@ -844,8 +844,8 @@ void ControlPanel::buttonClicked(Button* button)
                 {
                     if (recordEngines[recordSelector->getSelectedId()-1]->isWindowOpen())
                         recordEngines[recordSelector->getSelectedId()-1]->toggleConfigWindow();
-
-                    audio->beginCallbacks();
+					//È¥µôÒôÆµ
+                    //audio->beginCallbacks();
                     masterClock->start();
                     audioEditor->disable();
 
@@ -913,7 +913,8 @@ void ControlPanel::disableCallbacks()
 
     std::cout << "Control panel received signal to disable callbacks." << std::endl;
 
-    if (audio->callbacksAreActive())
+	//È¥µôÒôÆµ
+    /*if (audio->callbacksAreActive())
     {
         std::cout << "Stopping audio." << std::endl;
         audio->endCallbacks();
@@ -924,7 +925,7 @@ void ControlPanel::disableCallbacks()
         stopTimer();
         startTimer(60000); // back to refresh every 10 seconds
 
-    }
+    }*/
 
     playButton->setToggleState(false, dontSendNotification);
     recordButton->setToggleState(false, dontSendNotification);
