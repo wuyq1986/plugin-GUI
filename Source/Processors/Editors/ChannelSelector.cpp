@@ -83,9 +83,37 @@ moveRight(false), moveLeft(false), offsetLR(0), offsetUD(0), desiredOffset(0), t
     recordButtons.clear();
     
     // set button layout parameters
-    parameterOffset = 0;
-    recordOffset = getDesiredWidth();
-    audioOffset = getDesiredWidth()*2;
+	int width = 0;
+	if (p)
+	{
+		parameterOffset = width;
+		width += getDesiredWidth();
+	}
+	else 
+	{
+		parameterOffset = -1;
+	}
+	if (r)
+	{
+		recordOffset = width;
+		width += getDesiredWidth();
+	}
+	else
+	{
+		recordOffset = -1;
+	}
+	if (a)
+	{
+		audioOffset = width;
+		width += getDesiredWidth();
+	}
+	else
+	{
+		audioOffset = -1;
+	}
+    //parameterOffset = 0;
+    //recordOffset = getDesiredWidth();
+    //audioOffset = getDesiredWidth()*2;
     
     parameterButtons.clear();
     
@@ -146,7 +174,7 @@ void ChannelSelector::setNumChannels(int numChans)
     {
         for (int n = 0; n < difference; n++)
         {
-            addButton();
+            addButton(n);
         }
     }
     else if (difference < 0)
@@ -158,7 +186,7 @@ void ChannelSelector::setNumChannels(int numChans)
     }
     
     //Reassign numbers according to the actual channels (useful for channel mapper)
-    for (int n = 0; n < parameterButtons.size(); n++)
+	for (int n = 0; n < difference; n++)
     {
         int num = ((GenericEditor*)getParentComponent())->getChannel(n)->nodeIndex;
         parameterButtons[n]->setChannel(n+1, num+1);
@@ -217,12 +245,38 @@ void ChannelSelector::refreshButtonBoundaries()
         int xLoc = columnWidth / 2 + offsetLR + columnWidth*column;
         int yLoc = row * rowHeight + offsetUD;
         
-        parameterButtons[i]->setBounds(xLoc, yLoc, columnWidth, rowHeight);
+		if (parameterOffset != -1) 
+		{
+			parameterButtons[i]->setVisible(true);
+			parameterButtons[i]->setBounds(xLoc, yLoc, columnWidth, rowHeight);
+		}
+		else
+		{
+			parameterButtons[i]->setVisible(false);
+		}
+        
         
         if (isNotSink)
         {
-            recordButtons[i]->setBounds(xLoc - getDesiredWidth(), yLoc, columnWidth, rowHeight);
-            audioButtons[i]->setBounds(xLoc - getDesiredWidth()*2, yLoc, columnWidth, rowHeight);
+			if (recordOffset != -1)
+			{
+				recordButtons[i]->setVisible(true);
+				recordButtons[i]->setBounds(xLoc - recordOffset, yLoc, columnWidth, rowHeight);
+			}
+			else
+			{
+				recordButtons[i]->setVisible(false);
+			}
+			if (audioOffset != -1)
+			{
+				audioButtons[i]->setVisible(true);
+				audioButtons[i]->setBounds(xLoc - audioOffset, yLoc, columnWidth, rowHeight);
+			}
+			else
+			{
+				audioButtons[i]->setVisible(false);
+			}
+            
         }
         
         column++;
@@ -297,10 +351,10 @@ void ChannelSelector::timerCallback()
     
 }
 
-void ChannelSelector::addButton()
+void ChannelSelector::addButton(int size)
 {
     
-    int size = parameterButtons.size();
+    //int size = parameterButtons.size();
     
     ChannelSelectorButton* b = new ChannelSelectorButton(size+1, PARAMETER, titleFont);
     parameterButtons.add(b);

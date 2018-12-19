@@ -178,7 +178,7 @@ private:
     
     void resized();
     
-    void addButton();
+    void addButton(int num);
     void removeButton();
     void refreshButtonBoundaries();
     
