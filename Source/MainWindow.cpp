@@ -47,8 +47,7 @@
 	audioComponent = new AudioComponent();
 	std::cout << "Created audio component." << std::endl;
 
-	//wuyq È¥µôÒôÆµ
-	//audioComponent->connectToProcessorGraph(processorGraph);
+	audioComponent->connectToProcessorGraph(processorGraph);
 
 	setContentOwned(new UIComponent(this, processorGraph, audioComponent), true);
 
@@ -94,8 +93,7 @@ MainWindow::~MainWindow()
 
 	saveWindowBounds();
 
-	//È¥µôÒôÆµ
-	//audioComponent->disconnectProcessorGraph();
+	audioComponent->disconnectProcessorGraph();
 	UIComponent* ui = (UIComponent*) getContentComponent();
 	ui->disableDataViewport();
 
