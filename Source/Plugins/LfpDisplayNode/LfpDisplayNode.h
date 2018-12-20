@@ -68,32 +68,42 @@ public:
     {
         return displayBuffer;
     }
-    int getDisplayBufferIndex(int chan)
+    int getDisplayBufferEndIndex(int chan)
     {
-        return displayBufferIndex[chan];
+        return displayBufferEndIndex[chan];
     }
 
 	CriticalSection* getMutex()
 	{
 		return &displayMutex;
 	}
+	int getDisplaySampleRate()
+	{
+		return displaySampleRate;
+	}
+	void fillDisplayBuffer(int channel, const float*source, int numSamples,float gain);
+	void readDisplayBuffer(int channel, int requiredEndIndex, int maxCount, int *start1, int *size1, int *start2, int *size2);
+
 
 private:
 
     void initializeEventChannels();
 
     ScopedPointer<AudioSampleBuffer> displayBuffer;
-
-    Array<int> displayBufferIndex;
+	int displaySampleRate;  //每秒保存的采样数，影响到能查看的最小显示单元
+	int displayMaxSaveSeconds; //最大保持时间 秒
+	Array<int> displayBufferStartIndex;
+    Array<int> displayBufferEndIndex;  //每个channel的结束index
     Array<int> eventSourceNodes;
+	Array<int> lastRemain;
     std::map<int, int> channelForEventSource;
 
     int numEventChannels;
 
     float displayGain; //
-    float bufferLength; // s
+    //float bufferLength;
 
-    AbstractFifo abstractFifo;
+    //AbstractFifo abstractFifo;
 
     int64 bufferTimestamp;
     std::map<int, int> ttlState;

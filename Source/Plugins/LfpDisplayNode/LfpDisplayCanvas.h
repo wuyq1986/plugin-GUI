@@ -36,7 +36,7 @@ class LfpChannelDisplay;
 class LfpChannelDisplayInfo;
 class EventDisplayInterface;
 class LfpViewport;
-
+class ChannelDisplayInterface;
 /**
 
   Displays multiple channels of continuous data.
@@ -110,9 +110,12 @@ public:
     bool fullredraw; // used to indicate that a full redraw is required. is set false after each full redraw, there is a similar switch for ach ch display;
     static const int leftmargin=50; // left margin for lfp plots (so the ch number text doesnt overlap)
 
-    Array<bool> isChannelEnabled;
+    //Array<bool> isChannelEnabled;
 
     int nChans;
+
+	float getTimebase();
+	LfpDisplayNode* getProcessor();
 
 private:
 
@@ -139,7 +142,7 @@ private:
 
     MidiBuffer* eventBuffer;
 
-    ScopedPointer<LfpTimescale> timescale;
+    //ScopedPointer<LfpTimescale> timescale;
     ScopedPointer<LfpDisplay> lfpDisplay;
     ScopedPointer<LfpViewport> viewport;
 
@@ -173,18 +176,20 @@ private:
 
     OwnedArray<EventDisplayInterface> eventDisplayInterfaces;
 
-    void refreshScreenBuffer();
-    void updateScreenBuffer();
+    //void refreshScreenBuffer();
+    //void updateScreenBuffer();
 
     Array<int> displayBufferIndex;
     int displayBufferSize;
 
-    int scrollBarThickness;
+    //int scrollBarThickness;
+	OwnedArray<ChannelDisplayInterface> channelButtons;
+	void drawChannelButtons();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LfpDisplayCanvas);
 
 };
-
+/*
 class LfpTimescale : public Component
 {
 public:
@@ -206,26 +211,25 @@ private:
     StringArray labels;
 
 };
+*/
 
 class LfpDisplay : public Component
 {
 public:
     LfpDisplay(LfpDisplayCanvas*, Viewport*);
     ~LfpDisplay();
-
+	
     void setNumChannels(int numChannels);
     int getNumChannels();
 
-    int getTotalHeight();
+    //int getTotalHeight();
 
     void paint(Graphics& g);
 
     void refresh();
 
-    void resized();
-
-    void mouseDown(const MouseEvent& event);
-    void mouseWheelMove(const MouseEvent&  event, const MouseWheelDetails&   wheel) ;
+    //void mouseDown(const MouseEvent& event);
+    //void mouseWheelMove(const MouseEvent&  event, const MouseWheelDetails&   wheel) ;
 
 
     void setRange(float range, ChannelType type);
@@ -234,12 +238,12 @@ public:
     int getRange();
     int getRange(ChannelType type);
 
-    void setChannelHeight(int r, bool resetSingle = true);
-    int getChannelHeight();
-    void setInputInverted(bool);
-    void setDrawMethod(bool);
+    //void setChannelHeight(int r, bool resetSingle = true);
+    //int getChannelHeight();
+    //void setInputInverted(bool);
+    //void setDrawMethod(bool);
 
-    void setColors();
+    //void setColors();
 
     bool setEventDisplayState(int ch, bool state);
     bool getEventDisplayState(int ch);
@@ -247,28 +251,31 @@ public:
     int getColorGrouping();
     void setColorGrouping(int i);
 
-    void setEnabledState(bool, int);
-    bool getEnabledState(int);
+    bool getChannelState(int);
     void enableChannel(bool, int);
 
-    bool getSingleChannelState();
+    //bool getSingleChannelState();
 
     Array<Colour> channelColours;
 
-    Array<LfpChannelDisplay*> channels;
-    Array<LfpChannelDisplayInfo*> channelInfo;
+    //Array<LfpChannelDisplay*> channels;
+    //Array<LfpChannelDisplayInfo*> channelInfo;
 
     bool eventDisplayEnabled[8];
     bool isPaused; // simple pause function, skips screen bufer updates
 
 private:
-    void toggleSingleChannel(int chan);
-    int singleChan;
+	int topMargin = 20;
+	int rightMargin = 20;
+	int leftMargin = 50;
+	int bottomMargin = 50;
+    //void toggleSingleChannel(int chan);
+    //int singleChan;
 	Array<bool> savedChannelState;
 
     int numChans;
 
-    int totalHeight;
+    //int totalHeight;
 
     int colorGrouping;
 
@@ -280,6 +287,7 @@ private:
 
 };
 
+/*
 class LfpChannelDisplay : public Component
 {
 public:
@@ -356,6 +364,7 @@ protected:
 
 };
 
+
 class LfpChannelDisplayInfo : public LfpChannelDisplay,
     public Button::Listener
 {
@@ -376,6 +385,7 @@ private:
     ScopedPointer<UtilityButton> enableButton;
 
 };
+*/
 
 class EventDisplayInterface : public Component,
     public Button::Listener
@@ -403,6 +413,32 @@ private:
 
 };
 
+class ChannelDisplayInterface : public Component,
+	public Button::Listener
+{
+public:
+	ChannelDisplayInterface(LfpDisplay*, LfpDisplayCanvas*, int chNum);
+	~ChannelDisplayInterface();
+
+	void paint(Graphics& g);
+
+	void buttonClicked(Button* button);
+
+	void checkEnabledState();
+
+	bool isEnabled;
+
+private:
+
+	int channelNumber;
+
+	LfpDisplay* display;
+	LfpDisplayCanvas* canvas;
+
+	ScopedPointer<UtilityButton> chButton;
+
+};
+
 class LfpViewport : public Viewport
 {
 public:
@@ -412,6 +448,5 @@ public:
 private:
     LfpDisplayCanvas* canvas;
 };
-
 
 #endif  // __LFPDISPLAYCANVAS_H_B711873A__
