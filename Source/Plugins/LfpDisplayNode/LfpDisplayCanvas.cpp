@@ -43,6 +43,7 @@ LfpDisplayCanvas::LfpDisplayCanvas(LfpDisplayNode* processor_) :
 		historySeconds = maxHistorySeconds;
 	}
 	historySamples = historySeconds * historySampleRate;
+	showScreenBufferIndex = historySamples;
 	screenBuffer = new AudioSampleBuffer((nChans + 1), historySamples);
     screenBuffer->clear();
 
@@ -454,10 +455,12 @@ void LfpDisplayCanvas::buttonClicked(Button* b)
 	{
 		//缩小到X轴  //还是缩小到原来的尺寸?
 		//customTimebase = customTimebase == -1 ? timebase* 10.0f : customTimebase * 10.0f;
-		setCustomTimeBase(timebase);
+		setCustomTimeBase(-1,false);
+		setShowScreenBufferIndex(-1,false);
 		buttonState = -1;
 		xFangda->setState(-1);
 		yFangda->setState(-1);
+		viewport->repaint();
 		return;
 	}
 	else if (b == yFangda)
@@ -712,6 +715,7 @@ void LfpDisplayCanvas::refreshScreenBuffer()
 	{
 		historySeconds = maxHistorySeconds;
 	}
+	showScreenBufferIndex = historySamples;
 	historySamples = historySeconds * historySampleRate;
 	screenBuffer->setSize((nChans + 1), historySamples);
 	screenBufferStartIndex.clear();
@@ -1023,20 +1027,20 @@ ChannelType LfpDisplayCanvas::getSelectedType()
 
 void LfpDisplayCanvas::setSelectedType(ChannelType type, bool toggleButton)
 {
-    if (selectedChannelType == type)
-        return; //Nothing to do here
-    selectedChannelType = type;
-    rangeSelection->clear(dontSendNotification);
-rangeSelection->addItemList(voltageRanges[type], 1);
-int id = selectedVoltageRange[type];
-if (id)
-rangeSelection->setSelectedId(id, sendNotification);
-else
-rangeSelection->setText(selectedVoltageRangeValues[selectedChannelType], dontSendNotification);
-repaint(5, getHeight() - 55, 300, 100);
+	if (selectedChannelType == type)
+		return; //Nothing to do here
+	selectedChannelType = type;
+	rangeSelection->clear(dontSendNotification);
+	rangeSelection->addItemList(voltageRanges[type], 1);
+	int id = selectedVoltageRange[type];
+	if (id)
+		rangeSelection->setSelectedId(id, sendNotification);
+	else
+		rangeSelection->setText(selectedVoltageRangeValues[selectedChannelType], dontSendNotification);
+	repaint(5, getHeight() - 55, 300, 100);
 
-if (toggleButton)
-typeButtons[type]->setToggleState(true, dontSendNotification);
+	if (toggleButton)
+		typeButtons[type]->setToggleState(true, dontSendNotification);
 }
 
 String LfpDisplayCanvas::getTypeName(ChannelType type)
@@ -1087,20 +1091,28 @@ void LfpDisplayCanvas::setActionBottonState(int state)
 	}
 }
 
-void LfpDisplayCanvas::setCustomTimeBase(float c)
+void LfpDisplayCanvas::setCustomTimeBase(float c, bool needCheck)
 {
-	if (c < timebases[0].getFloatValue())
+	if (needCheck)
 	{
-		customTimebase = timebases[0].getFloatValue();
-	}
-	else if (c > historySeconds)
-	{
-		c = historySeconds;
-	}
+		if (c < timebases[0].getFloatValue())
+		{
+			customTimebase = timebases[0].getFloatValue();
+		}
+		else if (c > historySeconds)
+		{
+			c = historySeconds;
+		}
+		else
+		{
+			customTimebase = c;
+		}
+	} 
 	else
 	{
-		customTimebase = c;
+		customTimebase = -1;
 	}
+	
 
 	timebaseSelection->setText(String(customTimebase, 2), dontSendNotification);
 	timescale->setTimebase(customTimebase);
@@ -1123,31 +1135,76 @@ Range<float> LfpDisplayCanvas::getVoltageRange(int type)
 	}
 }
 
-void LfpDisplayCanvas::readScreenBuffer(int channel, int unit, int maxCount, int *start1, int *size1, int *start2, int *size2)
+int LfpDisplayCanvas::getShowScreenEndIndex()
 {
-	int requiredEndIndex = screenBufferEndIndex[channel];
-	int startIndex = screenBufferStartIndex[channel];
-	int endIndex = screenBufferEndIndex[channel];
+	int requiredEndIndex = screenBufferEndIndex[0];
+	int startIndex = screenBufferStartIndex[0];
+	int endIndex = screenBufferEndIndex[0];
 
 	if (showScreenBufferIndex > 0)
 	{
 		if (startIndex < endIndex)
 		{
-			requiredEndIndex = screenBufferEndIndex[channel] + showScreenBufferIndex - (endIndex - startIndex + 1);
-			if (requiredEndIndex > screenBufferEndIndex[channel])
+			requiredEndIndex = screenBufferEndIndex[0] + showScreenBufferIndex - (endIndex - startIndex + 1);
+			if (requiredEndIndex > screenBufferEndIndex[0])
 			{
-				requiredEndIndex = screenBufferEndIndex[channel];
+				requiredEndIndex = screenBufferEndIndex[0];
 			}
 		}
 		else
 		{
-			requiredEndIndex = screenBufferEndIndex[channel] + showScreenBufferIndex - historySamples;
+			requiredEndIndex = screenBufferEndIndex[0] + showScreenBufferIndex - historySamples;
 			if (requiredEndIndex < 0)
 			{
 				requiredEndIndex += historySamples;
 			}
 		}
 	}
+	return requiredEndIndex;
+}
+
+void LfpDisplayCanvas::setShowScreenBufferIndex(int index_, bool needCheck)
+{
+	showScreenBufferIndex = index_;
+	if (needCheck)
+	{
+		int startIndex = screenBufferStartIndex[0];
+		int endIndex = screenBufferEndIndex[0];
+		if (startIndex < endIndex)
+		{
+			if (showScreenBufferIndex < 0)
+			{
+				showScreenBufferIndex = 0;
+			}
+			else if (showScreenBufferIndex > endIndex)
+			{
+				showScreenBufferIndex = endIndex;
+			}
+		}
+		else
+		{
+			if (showScreenBufferIndex < 0)
+			{
+				showScreenBufferIndex += historySamples;
+			}
+			else if (showScreenBufferIndex > historySamples)
+			{
+				showScreenBufferIndex = historySamples - 1;
+			}
+		}
+	}
+	else
+	{
+		
+	}
+}
+
+void LfpDisplayCanvas::readScreenBuffer(int channel, int unit, int maxCount, int *start1, int *size1, int *start2, int *size2)
+{
+	int requiredEndIndex = getShowScreenEndIndex();
+	int startIndex = screenBufferStartIndex[channel];
+	int endIndex = screenBufferEndIndex[channel];
+
 	requiredEndIndex = requiredEndIndex - requiredEndIndex % unit;
 
 
@@ -1675,7 +1732,10 @@ void LfpDisplay::mouseUp(const MouseEvent& event)
 
 
 			//2.确定查看历史的时间段
-			//TODO
+			int endIndex = canvas->getShowScreenEndIndex();
+			int newEndIndex = endIndex - canvas->getTimeBase()*canvas->historySampleRate + canvas->getTimeBase()*canvas->historySampleRate
+				* (jmax(canvas->endPoint->x, canvas->startPoint->x) - canvas->leftmargin) / (getWidth() - canvas->leftmargin);
+			canvas->setShowScreenBufferIndex(newEndIndex);
 
 			canvas->startPoint = 0;
 			canvas->endPoint = 0;
@@ -1704,8 +1764,8 @@ void LfpDisplay::mouseUp(const MouseEvent& event)
 }
 void LfpDisplay::mouseDrag(const MouseEvent& event)
 {
-	//处理X轴，Y轴放大事件
-	if (canvas->getActionButtonState() != -1)
+	
+	if (canvas->getActionButtonState() != -1)  //处理X轴，Y轴放大事件
 	{
 		if (canvas->startPoint != NULL)
 		{
@@ -1716,6 +1776,27 @@ void LfpDisplay::mouseDrag(const MouseEvent& event)
 			
 		}
 		return;
+	}
+	else
+	{
+		//左右拖拽 查看历史
+		if (canvas->startPoint == 0)
+		{
+			canvas->startPoint = new Point<float>(event.getEventRelativeTo(viewport).getPosition().x,
+				event.getEventRelativeTo(viewport).getPosition().y);
+		}
+		else
+		{
+			int offset = event.getEventRelativeTo(viewport).getPosition().x - canvas->startPoint->x;
+			canvas->startPoint = new Point<float>(event.getEventRelativeTo(viewport).getPosition().x,
+				event.getEventRelativeTo(viewport).getPosition().y);
+			int endIndex = canvas->getShowScreenEndIndex();
+			int newEndIndex = endIndex - offset * canvas->getTimeBase()*canvas->historySampleRate / (getWidth() - canvas->leftmargin);
+			canvas->setShowScreenBufferIndex(newEndIndex);
+			viewport->repaint();
+		}
+		
+
 	}
 }
 

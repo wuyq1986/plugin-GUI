@@ -122,15 +122,17 @@ public:
 	void readScreenBuffer(int channel, int unit, int maxCount, int *start1, int *size1, int *start2, int *size2);
 	
 	AudioSampleBuffer* screenBuffer;
+	int getShowScreenEndIndex();
+	void setShowScreenBufferIndex(int index_, bool needCheck = true);
 	//保存历史数据的结构是一个环形结构，需要知道哪里是开始，哪里是结束
 	Array<int> screenBufferStartIndex;
 	Array<int> screenBufferEndIndex;
-	int showScreenBufferIndex = 25000;  //左右滑动查看历史数据时Index   0 --------- screenBuffer的最大samples
+	int showScreenBufferIndex = -1;  //左右滑动查看历史数据时Index   0 --------- screenBuffer的最大samples
 
 	void setCustomVoltageRange(int type,float start, float end);
 	Range<float> getVoltageRange(int type);
 	float getTimeBase();
-	void setCustomTimeBase(float c);
+	void setCustomTimeBase(float c, bool needCheck = true);
 	void refreshActionButton();
 	int getActionButtonState();
 	void setActionBottonState(int state);
