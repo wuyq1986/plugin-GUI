@@ -68,42 +68,32 @@ public:
     {
         return displayBuffer;
     }
-    int getDisplayBufferEndIndex(int chan)
+    int getDisplayBufferIndex(int chan)
     {
-        return displayBufferEndIndex[chan];
+        return displayBufferIndex[chan];
     }
 
 	CriticalSection* getMutex()
 	{
 		return &displayMutex;
 	}
-	int getDisplaySampleRate()
-	{
-		return displaySampleRate;
-	}
-	void fillDisplayBuffer(int channel, const float*source, int numSamples,float gain);
-	void readDisplayBuffer(int channel, int requiredEndIndex, int maxCount, int *start1, int *size1, int *start2, int *size2);
-
 
 private:
 
     void initializeEventChannels();
 
     ScopedPointer<AudioSampleBuffer> displayBuffer;
-	int displaySampleRate;  //每秒保存的采样数，影响到能查看的最小显示单元
-	int displayMaxSaveSeconds; //最大保持时间 秒
-	Array<int> displayBufferStartIndex;
-    Array<int> displayBufferEndIndex;  //每个channel的结束index
+
+    Array<int> displayBufferIndex;
     Array<int> eventSourceNodes;
-	Array<int> lastRemain;
     std::map<int, int> channelForEventSource;
 
     int numEventChannels;
 
     float displayGain; //
-    //float bufferLength;
+    float bufferLength; // s
 
-    //AbstractFifo abstractFifo;
+    AbstractFifo abstractFifo;
 
     int64 bufferTimestamp;
     std::map<int, int> ttlState;
@@ -115,7 +105,6 @@ private:
 	CriticalSection displayMutex;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LfpDisplayNode);
-
 };
 
 

@@ -36,7 +36,8 @@ class LfpChannelDisplay;
 class LfpChannelDisplayInfo;
 class EventDisplayInterface;
 class LfpViewport;
-class ChannelDisplayInterface;
+class ActionButton;
+
 /**
 
   Displays multiple channels of continuous data.
@@ -79,15 +80,19 @@ public:
     bool getInputInvertedState();
     bool getDrawMethodState();
 
-    const float getXCoord(int chan, int samp);
-    const float getYCoord(int chan, int samp);
+    //const float getXCoord(int chan, int samp);
+    //const float getYCoord(int chan, int samp);
 
-    const float getYCoordMin(int chan, int samp);
-    const float getYCoordMean(int chan, int samp);
-    const float getYCoordMax(int chan, int samp);
+    //const float getYCoordMin(int chan, int samp);
+    //const float getYCoordMean(int chan, int samp);
+    //const float getYCoordMax(int chan, int samp);
 
-    Array<int> screenBufferIndex;   //当前时间针的X坐标
-    Array<int> lastScreenBufferIndex;
+	int historySampleRate = 10000; //采样率 1秒采集多少样本
+	int historySeconds;
+	int historySamples;
+	int maxHistorySeconds = 10*60;  //最大历史保存时间
+	int maxHistorySamples = 10 * 60 * 10000 * 35; 
+	
 
     void comboBoxChanged(ComboBox* cb);
     void buttonClicked(Button* button);
@@ -110,17 +115,32 @@ public:
     bool fullredraw; // used to indicate that a full redraw is required. is set false after each full redraw, there is a similar switch for ach ch display;
     static const int leftmargin=50; // left margin for lfp plots (so the ch number text doesnt overlap)
 
-    //Array<bool> isChannelEnabled;
+    Array<bool> isChannelEnabled;
 
     int nChans;
 
-	float getTimebase();
-	LfpDisplayNode* getProcessor();
+	void readScreenBuffer(int channel, int unit, int maxCount, int *start1, int *size1, int *start2, int *size2);
+	
+	AudioSampleBuffer* screenBuffer;
+	//保存历史数据的结构是一个环形结构，需要知道哪里是开始，哪里是结束
+	Array<int> screenBufferStartIndex;
+	Array<int> screenBufferEndIndex;
+	int showScreenBufferIndex = 25000;  //左右滑动查看历史数据时Index   0 --------- screenBuffer的最大samples
 
+	void setCustomVoltageRange(int type,float start, float end);
+	Range<float> getVoltageRange(int type);
+	float getTimeBase();
+	void setCustomTimeBase(float c);
+	void refreshActionButton();
+	int getActionButtonState();
+	void setActionBottonState(int state);
+
+	//X轴，Y轴放大
+	ScopedPointer<Point<float>> startPoint = 0;
+	ScopedPointer<Point<float>> endPoint = 0;
 private:
 
     Array<float> sampleRate;
-    float timebase;
     float displayGain;
     float timeOffset;
     //int spread ; // vertical spacing between channels
@@ -131,18 +151,18 @@ private:
     //float waves[MAX_N_CHAN][MAX_N_SAMP*2]; // we need an x and y point for each sample
 
     LfpDisplayNode* processor;
-    AudioSampleBuffer* displayBuffer; // sample wise data buffer for display
-    AudioSampleBuffer* screenBuffer; // subsampled buffer- one int per pixel
+    AudioSampleBuffer* displayBuffer; // LfpDisplayNode中收集的 sample wise data buffer for display
+    // 本文件中保存的 subsampled buffer- one int per pixel
 
     //'define 3 buffers for min mean and max for better plotting of spikes
     // not pretty, but 'AudioSampleBuffer works only for channels X samples
-    AudioSampleBuffer* screenBufferMin; // like screenBuffer but holds min/mean/max values per pixel
-    AudioSampleBuffer* screenBufferMean; // like screenBuffer but holds min/mean/max values per pixel
-    AudioSampleBuffer* screenBufferMax; // like screenBuffer but holds min/mean/max values per pixel
+    //AudioSampleBuffer* screenBufferMin; // like screenBuffer but holds min/mean/max values per pixel
+    //AudioSampleBuffer* screenBufferMean; // like screenBuffer but holds min/mean/max values per pixel
+    //AudioSampleBuffer* screenBufferMax; // like screenBuffer but holds min/mean/max values per pixel
 
     MidiBuffer* eventBuffer;
 
-    //ScopedPointer<LfpTimescale> timescale;
+    ScopedPointer<LfpTimescale> timescale;
     ScopedPointer<LfpDisplay> lfpDisplay;
     ScopedPointer<LfpViewport> viewport;
 
@@ -158,6 +178,7 @@ private:
     StringArray voltageRanges[CHANNEL_TYPES];
     StringArray timebases;
     StringArray spreads; // option for vertical spacing between channels
+	float timebase;
     StringArray colorGroupings; // option for coloring every N channels the same
 
     ChannelType selectedChannelType;
@@ -176,20 +197,27 @@ private:
 
     OwnedArray<EventDisplayInterface> eventDisplayInterfaces;
 
-    //void refreshScreenBuffer();
-    //void updateScreenBuffer();
+    void refreshScreenBuffer();
+    void updateScreenBuffer();
 
     Array<int> displayBufferIndex;
     int displayBufferSize;
 
-    //int scrollBarThickness;
-	OwnedArray<ChannelDisplayInterface> channelButtons;
-	void drawChannelButtons();
+    int scrollBarThickness;
+
+	//X轴放大，缩小，Y轴放大，缩小按钮
+	float customTimebase = -1;
+	Range<float> customRange[CHANNEL_TYPES];
+	int buttonState = -1; //-1 啥事都没有   //1  X轴按钮放大   //2 Y轴按钮方法
+	ScopedPointer<ActionButton> xFangda;
+	ScopedPointer<ActionButton> xSuoxiao;
+	ScopedPointer<ActionButton> yFangda;
+	ScopedPointer<ActionButton> ySuoxiao;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LfpDisplayCanvas);
 
 };
-/*
+
 class LfpTimescale : public Component
 {
 public:
@@ -211,25 +239,28 @@ private:
     StringArray labels;
 
 };
-*/
 
 class LfpDisplay : public Component
 {
 public:
     LfpDisplay(LfpDisplayCanvas*, Viewport*);
     ~LfpDisplay();
-	
+
     void setNumChannels(int numChannels);
     int getNumChannels();
 
-    //int getTotalHeight();
+    int getTotalHeight();
 
     void paint(Graphics& g);
 
     void refresh();
 
-    //void mouseDown(const MouseEvent& event);
-    //void mouseWheelMove(const MouseEvent&  event, const MouseWheelDetails&   wheel) ;
+    void resized();
+
+	void mouseUp(const MouseEvent& event);
+	void mouseDown(const MouseEvent& event);
+	void mouseDrag(const MouseEvent& event);
+    void mouseWheelMove(const MouseEvent&  event, const MouseWheelDetails&   wheel) ;
 
 
     void setRange(float range, ChannelType type);
@@ -238,12 +269,12 @@ public:
     int getRange();
     int getRange(ChannelType type);
 
-    //void setChannelHeight(int r, bool resetSingle = true);
-    //int getChannelHeight();
-    //void setInputInverted(bool);
-    //void setDrawMethod(bool);
+    void setChannelHeight(int r, bool resetSingle = true);
+    int getChannelHeight();
+    void setInputInverted(bool);
+    void setDrawMethod(bool);
 
-    //void setColors();
+    void setColors();
 
     bool setEventDisplayState(int ch, bool state);
     bool getEventDisplayState(int ch);
@@ -251,31 +282,30 @@ public:
     int getColorGrouping();
     void setColorGrouping(int i);
 
-    bool getChannelState(int);
+    void setEnabledState(bool, int);
+    bool getEnabledState(int);
     void enableChannel(bool, int);
 
-    //bool getSingleChannelState();
+    bool getSingleChannelState();
+	int getSelectedChannelType();
+
 
     Array<Colour> channelColours;
 
-    //Array<LfpChannelDisplay*> channels;
-    //Array<LfpChannelDisplayInfo*> channelInfo;
+    Array<LfpChannelDisplay*> channels;
+    Array<LfpChannelDisplayInfo*> channelInfo;
 
     bool eventDisplayEnabled[8];
     bool isPaused; // simple pause function, skips screen bufer updates
 
 private:
-	int topMargin = 20;
-	int rightMargin = 20;
-	int leftMargin = 50;
-	int bottomMargin = 50;
-    //void toggleSingleChannel(int chan);
-    //int singleChan;
+    void toggleSingleChannel(int chan);
+    int singleChan;
 	Array<bool> savedChannelState;
 
     int numChans;
 
-    //int totalHeight;
+    int totalHeight;
 
     int colorGrouping;
 
@@ -287,7 +317,6 @@ private:
 
 };
 
-/*
 class LfpChannelDisplay : public Component
 {
 public:
@@ -364,7 +393,6 @@ protected:
 
 };
 
-
 class LfpChannelDisplayInfo : public LfpChannelDisplay,
     public Button::Listener
 {
@@ -385,7 +413,6 @@ private:
     ScopedPointer<UtilityButton> enableButton;
 
 };
-*/
 
 class EventDisplayInterface : public Component,
     public Button::Listener
@@ -413,40 +440,29 @@ private:
 
 };
 
-class ChannelDisplayInterface : public Component,
-	public Button::Listener
-{
-public:
-	ChannelDisplayInterface(LfpDisplay*, LfpDisplayCanvas*, int chNum);
-	~ChannelDisplayInterface();
-
-	void paint(Graphics& g);
-
-	void buttonClicked(Button* button);
-
-	void checkEnabledState();
-
-	bool isEnabled;
-
-private:
-
-	int channelNumber;
-
-	LfpDisplay* display;
-	LfpDisplayCanvas* canvas;
-
-	ScopedPointer<UtilityButton> chButton;
-
-};
-
 class LfpViewport : public Viewport
 {
 public:
     LfpViewport(LfpDisplayCanvas* canvas);
     void visibleAreaChanged(const Rectangle<int>& newVisibleArea);
-
+	void paint(Graphics& g);
 private:
     LfpDisplayCanvas* canvas;
+};
+
+class ActionButton : public ImageButton
+{
+public:
+	ActionButton(LfpDisplayCanvas* canvas,String name);
+	void setState(int state_)
+	{
+		state = state_;
+		repaint();
+	}
+	void paintButton(Graphics&, bool isMouseOver, bool isButtonDown) override;
+private:
+	LfpDisplayCanvas* canvas;
+	int state = -1;
 };
 
 #endif  // __LFPDISPLAYCANVAS_H_B711873A__
