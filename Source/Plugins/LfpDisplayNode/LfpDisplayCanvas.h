@@ -210,7 +210,7 @@ private:
 	//X轴放大，缩小，Y轴放大，缩小按钮
 	float customTimebase = -1;
 	Range<float> customRange[CHANNEL_TYPES];
-	int buttonState = -1; //-1 啥事都没有   //1  X轴按钮放大   //2 Y轴按钮方法
+	int buttonState = -1; //-1 啥事都没有   //1  X轴按钮放大   //2 Y轴按钮放大
 	ScopedPointer<ActionButton> xFangda;
 	ScopedPointer<ActionButton> xSuoxiao;
 	ScopedPointer<ActionButton> yFangda;
@@ -455,7 +455,7 @@ private:
 class ActionButton : public ImageButton
 {
 public:
-	ActionButton(LfpDisplayCanvas* canvas,String name);
+	ActionButton(String name);
 	void setState(int state_)
 	{
 		state = state_;
@@ -463,7 +463,6 @@ public:
 	}
 	void paintButton(Graphics&, bool isMouseOver, bool isButtonDown) override;
 private:
-	LfpDisplayCanvas* canvas;
 	int state = -1;
 };
 

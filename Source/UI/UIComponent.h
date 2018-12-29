@@ -36,6 +36,7 @@
 #include "../Processors/ProcessorGraph/ProcessorGraph.h"
 #include "../Audio/AudioComponent.h"
 #include "../MainWindow.h"
+#include "HistoryView.h"
 
 
 class MainWindow;
@@ -151,6 +152,7 @@ private:
     MessageCenterEditor* messageCenterEditor; // owned by ProcessorGraph
 	//wuyq
     //ScopedPointer<InfoLabel> infoLabel;
+	ScopedPointer<HistoryView> historyView;
     ScopedPointer<GraphViewer> graphViewer;
 	ScopedPointer<PluginManager> pluginManager;
 

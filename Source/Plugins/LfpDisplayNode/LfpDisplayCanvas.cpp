@@ -268,20 +268,20 @@ LfpDisplayCanvas::LfpDisplayCanvas(LfpDisplayNode* processor_) :
     TopLevelWindow::getTopLevelWindow(0)->addKeyListener(this);
 
 	
-	xFangda = new ActionButton(this, "Xfangda.png");
+	xFangda = new ActionButton("Xfangda.png");
 	addAndMakeVisible(xFangda);
 	xFangda->addListener(this);
 
-	xSuoxiao = new ActionButton(this, "Xsuoxiao.png");
+	xSuoxiao = new ActionButton("Xsuoxiao.png");
 	addAndMakeVisible(xSuoxiao);
 	xSuoxiao->addListener(this);
 
-	yFangda = new ActionButton(this, "Yfangda.png");
+	yFangda = new ActionButton("Yfangda.png");
 	addAndMakeVisible(yFangda);
 	yFangda->addListener(this);
 	yFangda->setVisible(false);
 
-	ySuoxiao = new ActionButton(this, "Ysuoxiao.png");
+	ySuoxiao = new ActionButton("Ysuoxiao.png");
 	addAndMakeVisible(ySuoxiao);
 	ySuoxiao->addListener(this);
 	ySuoxiao->setVisible(false);
@@ -1107,15 +1107,18 @@ void LfpDisplayCanvas::setCustomTimeBase(float c, bool needCheck)
 		{
 			customTimebase = c;
 		}
+		timebaseSelection->setText(String(customTimebase, 2), dontSendNotification);
+		timescale->setTimebase(customTimebase);
 	} 
 	else
 	{
 		customTimebase = -1;
+		timebaseSelection->setText(String(customTimebase == -1 ? timebase : customTimebase, 2), dontSendNotification);
+		timescale->setTimebase(customTimebase == -1 ? timebase : customTimebase);
 	}
 	
 
-	timebaseSelection->setText(String(customTimebase, 2), dontSendNotification);
-	timescale->setTimebase(customTimebase);
+	
 }
 
 float LfpDisplayCanvas::getTimeBase()
@@ -1176,9 +1179,9 @@ void LfpDisplayCanvas::setShowScreenBufferIndex(int index_, bool needCheck)
 			{
 				showScreenBufferIndex = 0;
 			}
-			else if (showScreenBufferIndex > endIndex)
+			else if (showScreenBufferIndex >= endIndex)
 			{
-				showScreenBufferIndex = endIndex;
+				showScreenBufferIndex = -1;
 			}
 		}
 		else
@@ -1187,9 +1190,9 @@ void LfpDisplayCanvas::setShowScreenBufferIndex(int index_, bool needCheck)
 			{
 				showScreenBufferIndex += historySamples;
 			}
-			else if (showScreenBufferIndex > historySamples)
+			else if (showScreenBufferIndex >= historySamples)
 			{
-				showScreenBufferIndex = historySamples - 1;
+				showScreenBufferIndex = - 1;
 			}
 		}
 	}
@@ -2034,6 +2037,7 @@ void LfpChannelDisplay::paint(Graphics& g)
 		if (unit < 1)
 		{
 			unit = 1;
+			showPixels = sampleCount;
 		}
 		int count = showPixels;
 		int start1, start2, size1, size2;
@@ -2049,7 +2053,7 @@ void LfpChannelDisplay::paint(Graphics& g)
 			for (int i = 0; i < size1 / unit; i++)
 			{
 				float x = i * getWidth() / (float)showPixels;
-				float y2 = source[i*unit] / range * channelHeightFloat + center;
+				//float y2 = source[i*unit] / range * channelHeightFloat + center;
 				//float y =  (0 - channelHeightFloat) * (rangValue.getEnd() - source[i*unit]) / (rangValue.getEnd() - rangValue.getStart());
 				float y = (source[i*unit] - (rangValue.getEnd() + rangValue.getStart()) / 2.0) / (rangValue.getEnd() - rangValue.getStart()) * channelHeightFloat + center;
 				int rawEventState = eventSource[i*unit];
@@ -2445,7 +2449,7 @@ void LfpViewport::paint(Graphics& g)
 	}
 }
 
-ActionButton::ActionButton(LfpDisplayCanvas* canvas_, String name) : ImageButton(), canvas(canvas_)
+ActionButton::ActionButton(String name) : ImageButton()
 {
 	File rootPath = File::getSpecialLocation(File::SpecialLocationType::currentApplicationFile).getParentDirectory();
 	Image image = ImageFileFormat::loadFrom(*rootPath.getChildFile(name).createInputStream());

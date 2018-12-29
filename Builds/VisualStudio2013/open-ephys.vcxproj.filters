@@ -1785,6 +1785,9 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_video\juce_video.cpp">
       <Filter>Juce Library Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\UI\HistoryView.cpp">
+      <Filter>open-ephys\Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CoreServices.h">
@@ -3397,6 +3400,9 @@
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>Juce Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UI\HistoryView.h">
+      <Filter>open-ephys\Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -328,6 +329,7 @@ copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";</Command>
     <ClCompile Include="..\..\Source\UI\CustomArrowButton.cpp" />
     <ClCompile Include="..\..\Source\UI\GraphViewer.cpp" />
     <ClCompile Include="..\..\Source\UI\EditorViewportButtons.cpp" />
+    <ClCompile Include="..\..\Source\UI\HistoryView.cpp" />
     <ClCompile Include="..\..\Source\UI\SignalChainManager.cpp" />
     <ClCompile Include="..\..\Source\UI\EditorViewport.cpp" />
     <ClCompile Include="..\..\Source\UI\ProcessorList.cpp" />
@@ -1539,6 +1541,7 @@ copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";</Command>
     <ClInclude Include="..\..\Source\UI\CustomArrowButton.h" />
     <ClInclude Include="..\..\Source\UI\GraphViewer.h" />
     <ClInclude Include="..\..\Source\UI\EditorViewportButtons.h" />
+    <ClInclude Include="..\..\Source\UI\HistoryView.h" />
     <ClInclude Include="..\..\Source\UI\SignalChainManager.h" />
     <ClInclude Include="..\..\Source\UI\EditorViewport.h" />
     <ClInclude Include="..\..\Source\UI\ProcessorList.h" />

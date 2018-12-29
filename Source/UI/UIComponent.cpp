@@ -40,6 +40,7 @@
 	//wuyq
 	//infoLabel = new InfoLabel();
 	//std::cout << "Created info label." << std::endl;
+	historyView = new HistoryView();
 
 	graphViewer = new GraphViewer();
 	std::cout << "Created graph viewer." << std::endl;
@@ -47,7 +48,9 @@
 	dataViewport = new DataViewport();
 	addChildComponent(dataViewport);
 	//dataViewport->addTabToDataViewport("Info", infoLabel,0);
-	dataViewport->addTabToDataViewport("Graph", graphViewer,0);
+	int index1 = dataViewport->addTabToDataViewport("Graph", graphViewer,0);
+	dataViewport->addTabToDataViewport("history", historyView, 0);
+	dataViewport->selectTab(index1);
 
 	std::cout << "Created data viewport." << std::endl;
 
@@ -101,7 +104,7 @@
 
 UIComponent::~UIComponent()
 {
-	dataViewport->destroyTab(0); // get rid of tab for InfoLabel
+	//dataViewport->destroyTab(0); // get rid of tab for InfoLabel
 	AccessClass::shutdownBroadcaster();
 }
 
