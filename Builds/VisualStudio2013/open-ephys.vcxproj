@@ -132,7 +132,7 @@ copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";</Command>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\JuceLibraryCode\modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;NOMINMAX;JUCE_API=__declspec(dllexport);JUCER_VS2013_78A5020=1;JUCE_APP_VERSION=0.4.0;JUCE_APP_VERSION_HEX=0x400;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader />
       <AssemblerListingLocation>$(IntDir)\</AssemblerListingLocation>
