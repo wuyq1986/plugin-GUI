@@ -595,10 +595,10 @@ RHD2000Editor::RHD2000Editor(GenericProcessor* parentNode,
     // add rescan button
     rescanButton = new UtilityButton("RESCAN", Font("Small Text", 13, Font::plain));
     rescanButton->setRadius(3.0f);
-    //rescanButton->setBounds(6, 108,65,18);
+    rescanButton->setBounds(6, 108,65,18);
     rescanButton->addListener(this);
     rescanButton->setTooltip("Check for connected headstages");
-    //addAndMakeVisible(rescanButton);
+    addAndMakeVisible(rescanButton);
 
     for (int i = 0; i < 2; i++)
     {

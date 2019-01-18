@@ -366,7 +366,7 @@ void ControlPanelButton::setState(bool b)
 
 
 ControlPanel::ControlPanel(ProcessorGraph* graph_, AudioComponent* audio_)
-    : graph(graph_), audio(audio_), initialize(true), open(false), lastEngineIndex(-1)
+    : graph(graph_), audio(audio_), initialize(true), open(true), lastEngineIndex(-1)
 {
 
     if (1)
@@ -405,12 +405,13 @@ ControlPanel::ControlPanel(ProcessorGraph* graph_, AudioComponent* audio_)
     //addAndMakeVisible(diskMeter);
 
     cpb = new ControlPanelButton(this);
+	cpb->setState(open);
     addAndMakeVisible(cpb);
 
     recordSelector = new ComboBox();
     recordSelector->addListener(this);
     
-    addChildComponent(recordSelector);
+    //addChildComponent(recordSelector);
 
     recordOptionsButton = new UtilityButton("R",Font("Small Text", 15, Font::plain));
     recordOptionsButton->setEnabledState(true);
@@ -684,25 +685,25 @@ void ControlPanel::resized()
     {
         int topBound = getHeight()-h+10-5;
 
-        recordSelector->setBounds((w - 435) > 40 ? 35 : w-450, topBound, 100, h-10);
-        recordSelector->setVisible(true);
+        //recordSelector->setBounds((w - 435) > 40 ? 35 : w-450, topBound, 100, h-10);
+        //recordSelector->setVisible(false);
 
-        recordOptionsButton->setBounds((w - 435) > 40 ? 140 : w-350,topBound, h-10, h-10);
+        recordOptionsButton->setBounds((w - 435) > 40 ? 140-100 : w-350+100,topBound, h-10, h-10);
         recordOptionsButton->setVisible(true);
 
-        filenameComponent->setBounds(165, topBound, w-500, h-10);
+		filenameComponent->setBounds(165 - 100, topBound, w - 500, h - 10);
         filenameComponent->setVisible(true);
 
-        newDirectoryButton->setBounds(w-h+4, topBound, h-10, h-10);
+		newDirectoryButton->setBounds(w - h + 4 - 100, topBound, h - 10, h - 10);
         newDirectoryButton->setVisible(true);
 
-        prependText->setBounds(165+w-490, topBound, 50, h-10);
+		prependText->setBounds(165 + w - 490 - 100, topBound, 50, h - 10);
         prependText->setVisible(true);
 
-        dateText->setBounds(165+w-435, topBound, 175, h-10);
+		dateText->setBounds(165 + w - 435 - 100, topBound, 175, h - 10);
         dateText->setVisible(true);
 
-        appendText->setBounds(165+w-255, topBound, 50, h-10);
+		appendText->setBounds(165 + w - 255 - 100, topBound, 50, h - 10);
         appendText->setVisible(true);
 
     }

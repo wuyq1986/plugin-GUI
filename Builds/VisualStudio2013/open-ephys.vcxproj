@@ -166,7 +166,8 @@ copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";</Command>
     </Bscmake>
     <PostBuildEvent>
       <Command>copy /Y "..\..\Resources\DLLs\VS2013\*.dll" "$(OutDir)";
-copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";</Command>
+copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";
+move /y "$(OutDir)\open-ephys.exe" "$(OutDir)\EphysLab V1.0.exe";</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">

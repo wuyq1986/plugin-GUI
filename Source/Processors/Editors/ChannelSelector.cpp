@@ -388,13 +388,13 @@ void ChannelSelector::removeButton()
 {
     int size = parameterButtons.size();
     
-    ChannelSelectorButton* b = parameterButtons.remove(size-1);
+	ChannelSelectorButton* b = parameterButtons.remove(size - 1);
     channelSelectorRegion->removeChildComponent(b);
     deleteAndZero(b);
     
     if (isNotSink)
     {
-        ChannelSelectorButton* br = recordButtons.remove(size-1);
+		ChannelSelectorButton* br = recordButtons.remove(size - 1);
         channelSelectorRegion->removeChildComponent(br);
         deleteAndZero(br);
         

@@ -255,12 +255,12 @@ void GraphViewer::paint (Graphics& g)
     g.setColour (Colours::grey);
     
     
-    g.drawFittedText ("open ephys", 40, 40, getWidth()-50, getHeight()-60, Justification::bottomRight, 100);
+    g.drawFittedText ("EphysLab V1.0", 40, 40, getWidth()-50, getHeight()-60, Justification::bottomRight, 100);
     
 	//wuyq memory leak
     //g.setFont (FONT_VERSION);
-	g.setFont(Font("Small Text", 14, Font::plain));
-    g.drawFittedText (currentVersionText, 40, 40, getWidth()-50, getHeight()-45, Justification::bottomRight, 100);
+	//g.setFont(Font("Small Text", 14, Font::plain));
+    //g.drawFittedText (currentVersionText, 40, 40, getWidth()-50, getHeight()-45, Justification::bottomRight, 100);
     
     // Draw connections
     const int numAvailableNodes = availableNodes.size();
