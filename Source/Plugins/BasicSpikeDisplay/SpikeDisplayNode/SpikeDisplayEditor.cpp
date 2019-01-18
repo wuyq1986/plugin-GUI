@@ -41,8 +41,7 @@ SpikeDisplayEditor::SpikeDisplayEditor(GenericProcessor* parentNode)
 
     tabText = "Spikes";
 
-
-
+	this->addTabToDataViewport();
 }
 
 SpikeDisplayEditor::~SpikeDisplayEditor()

@@ -93,6 +93,7 @@
 
 	//wuyq  Ìî³äÄ¬ÈÏµÄprocessors
 	editorViewport->fillDefaultProcessors();
+	dataViewport->selectTab(index1);
 #if JUCE_MAC
 	MenuBarModel::setMacMainMenu(this);
 	mainWindow->setMenuBar(0);

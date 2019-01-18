@@ -277,6 +277,11 @@ void VisualizerEditor::buttonEvent(Button* button)
 
 }
 
+void VisualizerEditor::addTabToDataViewport()
+{
+	tabSelector->triggerClick();
+}
+
 void VisualizerEditor::saveCustomParameters(XmlElement* xml)
 {
 

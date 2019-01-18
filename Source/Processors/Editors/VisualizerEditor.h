@@ -90,6 +90,8 @@ public:
     ScopedPointer<Visualizer> canvas;
 
     String tabText;
+
+	void addTabToDataViewport();
 private:
 
 	void initializeSelectors(bool showButtonSelector);

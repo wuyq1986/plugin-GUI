@@ -47,6 +47,7 @@
 #endif
 
 #define JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED 1
+#define JUCE_NO_DEPRECATION_WARNINGS 1
 
 //==============================================================================
 // juce_audio_devices flags:

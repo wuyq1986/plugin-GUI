@@ -1166,6 +1166,7 @@ void EditorViewport::fillDefaultProcessors()
 	addChildComponent(activeEditor8);
 	signalChainManager->updateVisibleEditors(activeEditor8, -1, 5, ADD);
 	AccessClass::getGraphViewer()->addNode(activeEditor8);
+	activeEditor8->getSourceEditor();
 	currentId++;
 
 	refreshEditors();

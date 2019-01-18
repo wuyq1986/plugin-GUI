@@ -33,6 +33,7 @@ LfpDisplayEditor::LfpDisplayEditor(GenericProcessor* parentNode, bool useDefault
 
     desiredWidth = 180;
 
+	this->addTabToDataViewport();
 }
 
 LfpDisplayEditor::~LfpDisplayEditor()
