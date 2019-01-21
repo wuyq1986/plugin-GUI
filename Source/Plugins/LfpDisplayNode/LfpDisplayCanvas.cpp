@@ -112,15 +112,15 @@ LfpDisplayCanvas::LfpDisplayCanvas(LfpDisplayNode* processor_) :
     rangeUnits.add("mV");
     typeNames.add("AUX");
 
-    tbut = new UtilityButton("AUX",Font("Small Text", 9, Font::plain));
-    tbut->setEnabledState(true);
-    tbut->setCorners(false,false,false,false);
-    tbut->addListener(this);
-    tbut->setClickingTogglesState(true);
-    tbut->setRadioGroupId(100,dontSendNotification);
-    tbut->setToggleState(false,dontSendNotification);
-    addAndMakeVisible(tbut);
-    typeButtons.add(tbut);
+    //tbut = new UtilityButton("AUX",Font("Small Text", 9, Font::plain));
+    //tbut->setEnabledState(true);
+    //tbut->setCorners(false,false,false,false);
+    //tbut->addListener(this);
+    //tbut->setClickingTogglesState(true);
+    //tbut->setRadioGroupId(100,dontSendNotification);
+    //tbut->setToggleState(false,dontSendNotification);
+    //addAndMakeVisible(tbut);
+    //typeButtons.add(tbut);
 
     //Ranges for ADC data
      voltageRanges[ADC_CHANNEL].add("0.01");

@@ -90,7 +90,7 @@ dll_load(okFP_dll_pchar libname)
 static DLL *
 dll_load(okFP_dll_pchar libname)
 {
-	return((DLL *) LoadLibrary(libname));
+	return((DLL *)LoadLibraryEx(libname, NULL, LOAD_WITH_ALTERED_SEARCH_PATH));
 }
 #else
 static DLL *

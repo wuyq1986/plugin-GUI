@@ -126,11 +126,11 @@ int PluginManager::loadPlugin(const String& pluginLoc) {
 	handle = dlopen(processorLocCString,RTLD_GLOBAL|RTLD_NOW);
 #else
 	HINSTANCE handle;
-	handle = LoadLibrary(processorLocCString);
+	handle = LoadLibraryEx(processorLocCString, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 #endif
 
 	if (!handle) {
-		ERROR_MSG("%s\n", dlerror());
+		ERROR_MSG("%s,dllPath:%s\n", dlerror(), processorLocCString);
 		dlclose(handle);
 		return -1;
 	}

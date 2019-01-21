@@ -41,9 +41,9 @@
 #if ! JUCE_DONT_DECLARE_PROJECTINFO
 namespace ProjectInfo
 {
-    const char* const  projectName    = "open-ephys";
-    const char* const  versionString  = "0.4.4.1";
-    const int          versionNumber  = 0x40401;
+    const char* const  projectName    = "EphysLab V1.0";
+    const char* const  versionString  = "0.1.0";
+    const int          versionNumber  = 0x10;
 }
 #endif
 
