@@ -65,7 +65,8 @@ public:
 
     void checkSettings();
     void refreshElectrodeList();
-
+	void startAcquisition() override;
+	void stopAcquisition() override;
 private:
 
     void drawElectrodeButtons(int);

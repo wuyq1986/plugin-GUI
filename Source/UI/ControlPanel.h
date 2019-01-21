@@ -370,6 +370,8 @@ private:
     ScopedPointer<PlayButton> playButton;
 
     ScopedPointer<Clock> masterClock;
+
+	ScopedPointer<UtilityButton> resetButton;
 	//wuyq
     //ScopedPointer<CPUMeter> cpuMeter;
     //ScopedPointer<DiskSpaceMeter> diskMeter;

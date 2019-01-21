@@ -380,6 +380,12 @@ ControlPanel::ControlPanel(ProcessorGraph* graph_, AudioComponent* audio_)
         // font.setHeight(15);
     }
 
+	Font titleFont = Font("Small Text", 10, Font::plain);
+	resetButton = new UtilityButton("RESET", titleFont);
+	resetButton->addListener(this);
+	resetButton->setRadius(3.0f);
+	addAndMakeVisible(resetButton);
+
 	
     audioEditor = (AudioEditor*) graph->getAudioNode()->createEditor();
 	//wuyq
@@ -637,6 +643,7 @@ void ControlPanel::resized()
     if (offset2 > h)
         offset2 = h;
 
+	resetButton->setBounds(8, h / 6, 50, h * 2/ 3);
 	//wuyq
     /*if (cpuMeter != 0)
     {
@@ -806,6 +813,9 @@ void ControlPanel::buttonClicked(Button* button)
             }
             recordSelector->setEnabled(false);
             recordOptionsButton->setEnabled(false);
+
+			//按钮不可点击
+			resetButton->setEnabled(false);
         }
         else
         {
@@ -824,6 +834,8 @@ void ControlPanel::buttonClicked(Button* button)
             recordSelector->setEnabled(true);
             recordOptionsButton->setEnabled(true);
 
+			//
+			resetButton->setEnabled(true);
         }
 
         return;
@@ -873,6 +885,11 @@ void ControlPanel::buttonClicked(Button* button)
         recordEngines[id]->toggleConfigWindow();
     }
 
+
+	if (button == resetButton)
+	{
+		AccessClass::getEditorViewport()->fillDefaultProcessors();
+	}
 }
 
 void ControlPanel::comboBoxChanged(ComboBox* combo)

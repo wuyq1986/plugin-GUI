@@ -229,7 +229,10 @@ okCFrontPanel::okCFrontPanel(okFrontPanel_HANDLE hnd)
 okCFrontPanel::okCFrontPanel()
 	{ h=okFrontPanel_Construct(); }
 okCFrontPanel::~okCFrontPanel()
-	{ okFrontPanel_Destruct(h); }
+{
+	okFrontPanelDLL_FreeLib();
+	okFrontPanel_Destruct(h);
+}
 int okCFrontPanel::GetHostInterfaceWidth()
 	{ return(okFrontPanel_GetHostInterfaceWidth(h)); }
 bool okCFrontPanel::IsHighSpeed()

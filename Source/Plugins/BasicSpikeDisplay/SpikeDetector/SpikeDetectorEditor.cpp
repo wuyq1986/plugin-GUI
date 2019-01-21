@@ -84,6 +84,7 @@ SpikeDetectorEditor::SpikeDetectorEditor(GenericProcessor* parentNode, bool useD
     plusButton->addListener(this);
     plusButton->setRadius(3.0f);
     plusButton->setBounds(15,42,14,14);
+
     addAndMakeVisible(plusButton);
 
     ElectrodeEditorButton* e1 = new ElectrodeEditorButton("EDIT",font);
@@ -146,6 +147,20 @@ SpikeDetectorEditor::~SpikeDetectorEditor()
 
 }
 
+void SpikeDetectorEditor::startAcquisition()
+{
+	GenericEditor::startAcquisition();
+	plusButton->setEnabled(false);
+	//plusButton->setEnabledState(false);
+}
+
+void SpikeDetectorEditor::stopAcquisition()
+{
+	GenericEditor::stopAcquisition();
+	plusButton->setEnabled(true);
+	//plusButton->setEnabledState(true);
+}
+
 void SpikeDetectorEditor::sliderEvent(Slider* slider)
 {
     int electrodeNum = -1;
@@ -173,7 +188,6 @@ void SpikeDetectorEditor::sliderEvent(Slider* slider)
 
 void SpikeDetectorEditor::buttonEvent(Button* button)
 {
-
 
     if (electrodeButtons.contains((ElectrodeButton*) button))
     {

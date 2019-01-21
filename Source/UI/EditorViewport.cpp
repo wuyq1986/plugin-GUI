@@ -27,6 +27,8 @@
 #include "GraphViewer.h"
 #include "EditorViewportButtons.h"
 #include "../AccessClass.h"
+#include "../Processors/Splitter/Splitter.h"
+#include <Windows.h>
 
 EditorViewport::EditorViewport()
     : leftmostEditor(0),
@@ -730,8 +732,22 @@ void EditorViewport::mouseDown(const MouseEvent& e)
 			
             if (e.mods.isRightButtonDown())
             {
-				//wuyq 屏蔽右键
+				//wuyq 右键属性，只有 COMMON AVG REF ,  BANDPASS FILTER , CHANNEL MAP才可以删除
+				String name = editorArray[i]->getName();
+				if (name.compareIgnoreCase("common avg ref") == 0 || name.compareIgnoreCase("bandpass filter") == 0
+					|| name.compareIgnoreCase("channel map") == 0) 
+				{
+					PopupMenu m;
+					m.addItem(1, "Delete", true);
+					const int result = m.show();
+					if (result == 1)
+					{
+						deleteNode(editorArray[i]);
+						return;
+					}
+				}
 				return;
+				
 				/*
                 if (!editorArray[i]->getCollapsedState() && e.y > 22)
                     return;
@@ -1099,14 +1115,62 @@ void EditorViewport::fillDefaultProcessors()
 	//Splitter
 	//Spike Detector    LFP Viewer
 	//Spike Viewer
-	GenericEditor* activeEditor1 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
-		AccessClass::getProcessorList()->getItemInfo(juce::String("Sources"), juce::String("Rhythm FPGA")), currentId);
-	activeEditor1->refreshColors();
-	addChildComponent(activeEditor1);
-	signalChainManager->updateVisibleEditors(activeEditor1, -1, 0, ADD);
-	AccessClass::getGraphViewer()->addNode(activeEditor1);
-	currentId++;
-
+	if (editorArray.size() > 0)
+	{
+		//removeAllChildren();
+		//signalChainManager->clearSignalChain();
+		//AccessClass::getGraphViewer()->removeAllNodes();
+		//AccessClass::getDataViewport()->getNumTabs();
+		//要按顺序删除，不然会出问题
+		String deleteOrderString[] = { "Spike Viewer", "Spike Detector", "LFP Viewer", "Splitter",
+			"Channel Map", "Bandpass Filter", "Common Avg Ref" };
+		for (int i = 0; i < 7; i++) 
+		{
+			bool deleted = false;
+			for (int j = 0; j < editorArray.size(); j++)
+			{
+				if (editorArray[j]->getName().compareIgnoreCase(deleteOrderString[i]) == 0)
+				{
+					deleteNode(editorArray[j]);
+					deleted = true;
+					break;
+				}
+			}
+			if (!deleted && i < 3) 
+			{
+				for (int j = 0; j < editorArray.size(); j++)
+				{
+					if (editorArray[j]->isSplitter())
+					{
+						//Splitter* processer = (Splitter*)editorArray[j]->getProcessor();
+						SplitterEditor* editor = (SplitterEditor*)editorArray[j]->getProcessor()->getEditor();
+						Splitter* processor = (Splitter*)editor->getProcessor();
+						editor->switchDest(processor->getPath() == 0 ? 1 : 0);
+						break;
+					}
+				}
+				for (int j = 0; j < editorArray.size(); j++)
+				{
+					if (editorArray[j]->getName().compareIgnoreCase(deleteOrderString[i]) == 0)
+					{
+						deleteNode(editorArray[j]);
+						deleted = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		GenericEditor* activeEditor1 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
+			AccessClass::getProcessorList()->getItemInfo(juce::String("Sources"), juce::String("Rhythm FPGA")), currentId);
+		activeEditor1->refreshColors();
+		addChildComponent(activeEditor1);
+		signalChainManager->updateVisibleEditors(activeEditor1, -1, 0, ADD);
+		AccessClass::getGraphViewer()->addNode(activeEditor1);
+		currentId++;
+	}
 
 	GenericEditor* activeEditor2 = (GenericEditor*)AccessClass::getProcessorGraph()->createNewProcessor(
 		AccessClass::getProcessorList()->getItemInfo(juce::String("Filters"), juce::String("Common Avg Ref")), currentId);
