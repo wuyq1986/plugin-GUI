@@ -63,7 +63,7 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">open-ephys</TargetName>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\bin\</OutDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">open-ephys</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">EphysLab V1.0</TargetName>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">.\x64\Debug64\bin\</OutDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">open-ephys</TargetName>
@@ -148,7 +148,7 @@ copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";</Command>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)\open-ephys.exe</OutputFile>
+      <OutputFile>$(OutDir)\$(TargetFileName)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -166,8 +166,7 @@ copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";</Command>
     </Bscmake>
     <PostBuildEvent>
       <Command>copy /Y "..\..\Resources\DLLs\VS2013\*.dll" "$(OutDir)";
-copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";
-move /y "$(OutDir)\open-ephys.exe" "$(OutDir)\EphysLab V1.0.exe";</Command>
+copy /Y "..\..\Resources\custom-dev\*" "$(OutDir)";</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">
