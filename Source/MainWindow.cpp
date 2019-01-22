@@ -30,6 +30,36 @@
 		Colour(Colours::black),
 		DocumentWindow::allButtons)
 {
+	//无聊逻辑，防止给了程序不给钱
+	char* expiredDateStr = "2019-02-02";
+	//char* expiredDateStr = "2019-02-01";
+	int year, month, day;
+	sscanf(expiredDateStr, "%d-%d-%d", &year, &month, &day);
+	tm expiredTm;
+	expiredTm.tm_year = year - 1900;
+	expiredTm.tm_mon = month - 1;
+	expiredTm.tm_mday = day;
+	expiredTm.tm_hour = 0;
+	expiredTm.tm_min = 0;
+	expiredTm.tm_sec = 0;
+	expiredTm.tm_isdst = 0;
+	time_t expiredTime = mktime(&expiredTm);
+
+	time_t currTime = time(0);
+	if (currTime > expiredTime)
+	{
+		String titleMessage = String("Internal error");
+		String contentMessage = String("Internal error! Please contract developer.");
+		// this uses a bool since there are only two options
+		// also, omitting parameters works fine, even though the docs don't show defaults
+		AlertWindow::showMessageBox(AlertWindow::QuestionIcon,
+			titleMessage,
+			contentMessage,
+			String("Close"),
+			0);
+		JUCEApplication::quit();
+	}
+
 
 	setResizable(true,      // isResizable
 			false);   // useBottomCornerRisizer -- doesn't work very well
