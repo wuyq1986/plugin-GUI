@@ -43,16 +43,15 @@ ChannelMappingEditor::ChannelMappingEditor(GenericProcessor* parentNode, bool us
 
     modifyButton = new ElectrodeEditorButton("Remap",Font("Small Text",14,Font::plain));
     modifyButton->addListener(this);
-    //addAndMakeVisible(modifyButton);
-    //modifyButton->setBounds(220,110,60,10);
+    addAndMakeVisible(modifyButton);
+    modifyButton->setBounds(220,110,60,10);
     modifyButton->setToggleState(false, dontSendNotification);
     modifyButton->setClickingTogglesState(true);
 
     resetButton = new ElectrodeEditorButton("Reset", Font("Small Text",14,Font::plain));
     resetButton->addListener(this);
     addAndMakeVisible(resetButton);
-    //resetButton->setBounds(285,110,60,10);
-	resetButton->setBounds(220, 110, 60, 10);
+    resetButton->setBounds(285,110,60,10);
     resetButton->setToggleState(true, dontSendNotification);
     resetButton->setClickingTogglesState(false);
     resetButton->setEnabled(false);

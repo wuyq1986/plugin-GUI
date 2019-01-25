@@ -90,6 +90,7 @@
 
 	addKeyListener(commandManager.getKeyMappings());
 
+	
 	loadWindowBounds();
 	setUsingNativeTitleBar(true);
 	Component::addToDesktop(getDesktopWindowStyleFlags());  // prevents the maximize
@@ -217,6 +218,12 @@ void MainWindow::loadWindowBounds()
 	XmlDocument doc(file);
 	XmlElement* xml = doc.getDocumentElement();
 
+	//wuyq 2019/01/25 防止程序打开的时候在屏幕的最边上看不到
+	delete xml;
+	centreWithSize(800, 600);
+	return;
+
+	/*
 	if (xml == 0 || ! xml->hasTagName("MAINWINDOW"))
 	{
 
@@ -276,6 +283,6 @@ void MainWindow::loadWindowBounds()
 		}
 
 		delete xml;
-	}
+	}*/
 	// return "Everything went ok.";
 }
